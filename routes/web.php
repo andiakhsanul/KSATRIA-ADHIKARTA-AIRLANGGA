@@ -9,14 +9,20 @@ use App\Http\Controllers\ReviewerAssignmentController;
 use App\Http\Controllers\RevisiController;
 use App\Http\Controllers\TimController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckAuthMiddleware;
+use App\Http\Middleware\OperatorMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [LoginController::class, 'index'])->name('login');
-Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('login.authenticate');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
-Route::post('/register/create', [RegisterController::class, 'register'])->name('register');
+Route::middleware('guest')->group(function(){
+    Route::get('/', [LoginController::class, 'index'])->name('login');
+    Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('login.authenticate');
+    
+    Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
+    Route::post('/register/create', [RegisterController::class, 'register'])->name('register');
+});
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
 
@@ -34,18 +40,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/proposal/show/{id}', [ProposalController::class, 'show'])->name('proposal.show');
 
     Route::get('/manajemen-proposal/all', [ProposalController::class, 'indexOperator'])->name('operator.proposal.index');
-    Route::get('/manajemen-proposal/detail/{nama_tim}/{tim_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
+    Route::get('/manajemen-proposal/detail/{nama_tim}/{proposal_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
 
     Route::get('/reviewer-proposal/all', [ProposalController::class, 'indexReviewer'])->name('reviewer.proposal.index');
-
-    // Reviewer Assigment
-    Route::get('/reviewer-assignments', [ReviewerAssignmentController::class, 'index'])->name('reviewer.assignments');
-    Route::post('/reviewer-assignments', [ReviewerAssignmentController::class, 'assign'])->name('reviewer.assign');
-    Route::delete('/reviewer-assignments', [ReviewerAssignmentController::class, 'remove'])->name('reviewer.remove');
 
     // file controller
     Route::get('/file/view/{folder}/{filename}', [FileController::class, 'viewFile'])->name('file.view');
     Route::get('/file/download/{folder}/{filename}', [FileController::class, 'downloadFile'])->name('file.download');
+
 
     // Review & revisi
     Route::post('/review/{proposal_id}', [ReviewController::class, 'store'])->name('review.store');
@@ -64,14 +66,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tim/{tim}/anggota/{user}', [TimController::class, 'removeAnggota'])->name('tim.anggota.remove');
 
 
+
+
+
+});
+
+
+Route::middleware(['auth', 'operator'])->group(function () {
+
     // UserController
     Route::get('/user/all', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
     Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
-    Route::delete('/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete'); 
+    Route::delete('/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
 
-    Route::get('/users-fetch', [UserController::class, 'fetchIndex']);
+
+    // Reviewer Assigment
+    Route::get('/reviewer-assignments', [ReviewerAssignmentController::class, 'index'])->name('reviewer.assignments');
+    Route::post('/reviewer-assignments', [ReviewerAssignmentController::class, 'assign'])->name('reviewer.assign');
+    Route::delete('/reviewer-assignments', [ReviewerAssignmentController::class, 'remove'])->name('reviewer.remove');
 
 });

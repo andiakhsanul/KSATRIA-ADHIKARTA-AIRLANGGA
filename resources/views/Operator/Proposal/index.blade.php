@@ -26,7 +26,7 @@
                         {{ $proposal->created_at }}
                     </td>
                     <td class="p-3">
-                        <a href="{{ route('operator.proposal.detail', ['nama_tim' => $proposal->tim->nama_tim, 'tim_id' => $proposal->id]) }}"
+                        <a href="{{ route('operator.proposal.detail', ['nama_tim' => $proposal->tim->nama_tim, 'proposal_id' => $proposal->id]) }}"
                             class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Detail</a>
                     </td>
                 </tr>

@@ -3,6 +3,12 @@
 @section('content-title', 'Upload Proposal')
 @section('content')
 
+    @if (session('error'))
+        <div class="bg-red-600 text-white p-3 rounded-md mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <form action="{{ route('proposal.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
@@ -17,8 +23,23 @@
         </div>
 
         <div class="space-y-2">
+            <label for="pkm_id" class="block text-zinc-300 font-medium">Jenis PKM:</label>
+            <select id="pkm_id" name="pkm_id" required
+                class="w-full bg-zinc-900 border border-zinc-600 rounded-md px-4 py-2.5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                <option value="" disabled selected>Pilih PKM</option>
+                @foreach ($pkm as $item)
+                    <option value="{{ $item->id }}">{{ $item->nama_pkm }}</option>
+                @endforeach
+            </select>
+            @error('pkm_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+
+        <div class="space-y-2">
             <label for="abstract" class="block text-zinc-300 font-medium">Abstract:</label>
-            <textarea id="abstract" name="abstract" required rows="5"
+            <textarea id="abstract" name="abstract" required rows="10"
                 class="w-full bg-zinc-900 border border-zinc-600 rounded-md px-4 py-2.5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                 placeholder="Tuliskan abstract proposal"></textarea>
             @error('abstract')
