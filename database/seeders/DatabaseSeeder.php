@@ -26,28 +26,28 @@ class DatabaseSeeder extends Seeder
             'role_id' => 1 // operator
         ]);
 
-        User::create([
-            'nama_lengkap' => 'Muhammad Alif Adiawan',
-            'email' => 'alifadiawan2005@gmail.com',
-            'password' => '1234567890',
-            'nim' => '434231051',
-            'role_id' => 3 // tim
-        ]);
+        // User::create([
+        //     'nama_lengkap' => 'Muhammad Alif Adiawan',
+        //     'email' => 'alifadiawan2005@gmail.com',
+        //     'password' => '1234567890',
+        //     'nim' => '434231051',
+        //     'role_id' => 3 // tim
+        // ]);
 
-        User::create([
-            'nama_lengkap' => 'Pak Arman',
-            'email' => 'arman@gmail.com',
-            'password' => '1234567890',
-            'nip' => '00217279182',
-            'role_id' => 2 // reviewer
-        ]);
+        // User::create([
+        //     'nama_lengkap' => 'Pak Arman',
+        //     'email' => 'arman@gmail.com',
+        //     'password' => '1234567890',
+        //     'nip' => '00217279182',
+        //     'role_id' => 2 // reviewer
+        // ]);
 
-        User::create([
-            'nama_lengkap' => 'Bu Tessa',
-            'email' => 'tessa@gmail.com',
-            'password' => '1234567890',
-            'nip' => '0878281729',
-            'role_id' => 2 // reviewer
-        ]);
+        // User::create([
+        //     'nama_lengkap' => 'Bu Tessa',
+        //     'email' => 'tessa@gmail.com',
+        //     'password' => '1234567890',
+        //     'nip' => '0878281729',
+        //     'role_id' => 2 // reviewer
+        // ]);
     }
 }
