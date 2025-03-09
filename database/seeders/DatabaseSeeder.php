@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'nama_lengkap' => 'operator@adhikarta.com',
             'email' => 'operator@adhikarta.com',
-            'password' => '1234567890',
+            'password' => 'unair-adhikarta',
             'nim' => '1234567890',
             'role_id' => 1 // operator
         ]);
