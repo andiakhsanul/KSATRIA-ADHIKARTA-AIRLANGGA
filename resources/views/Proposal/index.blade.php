@@ -118,21 +118,6 @@
                                 </p>
                             </div>
 
-                            <!-- Timeline -->
-                            <h4 class="text-sm font-medium text-zinc-400 mb-3">Timeline:</h4>
-                            <div class="relative border-l-2 border-zinc-600 pl-5 pb-2 ml-2">
-                                <!-- Timeline items - replace with actual data from your model -->
-                                <div class="mb-6 relative">
-                                    <div
-                                        class="absolute -left-[27px] mt-1.5 w-4 h-4 rounded-full bg-blue-500 border-4 border-zinc-800">
-                                    </div>
-                                    <div class="bg-zinc-700/50 p-3 rounded-md">
-                                        <h5 class="text-white font-medium">Proposal Diunggah</h5>
-                                        <p class="text-zinc-400 text-sm">{{ $item->created_at->format('d M Y, H:i') }}</p>
-                                        <p class="text-zinc-300 mt-1">Proposal telah berhasil diunggah ke sistem.</p>
-                                    </div>
-                                </div>
-
                                 @if (isset($item->reviewed_at))
                                     <div class="mb-6 relative">
                                         <div
@@ -194,7 +179,7 @@
 
                             <!-- Actions -->
                             <div class="flex justify-end space-x-3 mt-6">
-                                <a href="{{ route('proposal.show', $item->id )}}"
+                                <a href="{{ route('proposal.show', $item->id) }}"
                                     class="px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded-md transition text-sm inline-flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -206,7 +191,7 @@
                                     Detail
                                 </a>
 
-                                <button onclick="confirmDelete('{{ $item->id }}')"
+                                <button onclick="openModal('deleteProposal')"
                                     class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-md transition text-sm inline-flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -223,31 +208,24 @@
         </div>
 
         <!-- Delete Confirmation Modal (Hidden by default) -->
-        <div id="deleteModal"
-            class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden flex items-center justify-center p-4">
-            <div class="bg-zinc-800 rounded-xl shadow-xl border border-zinc-700 w-full max-w-md mx-auto z-50">
-                <div class="px-6 py-4 border-b border-zinc-700">
-                    <h3 class="text-lg font-semibold text-white">Konfirmasi Hapus</h3>
-                </div>
-                <div class="px-6 py-4">
-                    <p class="text-zinc-300">Apakah Anda yakin ingin menghapus proposal ini?</p>
-                </div>
-                <div class="px-6 py-4 border-t border-zinc-700 flex justify-end space-x-3">
-                    <button type="button" onclick="closeDeleteModal()"
-                        class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-md transition">
-                        Batal
-                    </button>
-                    <form id="deleteForm" action="{{ route('proposal.delete', $item->id) }}" method="POST" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition">
-                            Hapus
-                        </button>
-                    </form>
-                </div>
+        <x-modal id="deleteProposal" title="Hapus Proposal">
+
+
+            <div class="px-6 py-4">
+                <p class="text-zinc-300">Apakah Anda yakin ingin menghapus proposal ini?</p>
             </div>
-        </div>
+            <div class="px-6 py-4 flex justify-end space-x-3">
+                <form action="{{ route('proposal.delete', $item->id) }}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition">
+                        Hapus
+                    </button>
+                </form>
+            </div>
+
+
+        </x-modal>
     @endif
 
     <script>
@@ -263,15 +241,6 @@
                 content.classList.add('hidden');
                 chevron.classList.remove('rotate-180');
             }
-        }
-
-        // Delete confirmation
-        function confirmDelete(id) {
-            const modal = document.getElementById('deleteModal');
-            const form = document.getElementById('deleteForm');
-
-            form.action = "/" + id;
-            modal.classList.remove('hidden');
         }
 
         function closeDeleteModal() {

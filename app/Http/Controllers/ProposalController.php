@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JenisPKMModel;
 use App\Models\ProposalModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,9 +30,12 @@ class ProposalController extends Controller
         return view('Operator.Proposal.index', compact('proposals'));
     }
 
-    public function detailProposal($nama_tim, $tim_id)
+    public function detailProposal($nama_tim, $proposal_id)
     {
-        $proposal = ProposalModel::with('tim')->where('tim_id', $tim_id)->firstOrFail();
+        $proposal = ProposalModel::with('tim')
+            ->select('id', 'judul_proposal', 'abstract', 'status','tim_id', 'file_path')
+            ->where('id', $proposal_id)
+            ->firstOrFail();
 
         return view('Operator.Proposal.detail', compact('proposal'));
     }
@@ -54,22 +58,34 @@ class ProposalController extends Controller
 
     public function create()
     {
-        return view('Proposal.create');
+        $pkm = JenisPKMModel::select('id', 'nama_pkm')->get();
+        return view('Proposal.create', compact('pkm'));
     }
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'judul_proposal' => 'required|string|max:255',
             'abstract' => 'required|string',
             'file' => 'required|mimes:pdf,docx|max:20480', // Maksimal 20MB
+            'pkm_id' => 'required'
+        ], [
+            'judul_proposal.required' => 'Judul proposal harus diisi.',
+            'judul_proposal.string' => 'Judul proposal harus berupa teks.',
+            'judul_proposal.max' => 'Judul proposal tidak boleh lebih dari 255 karakter.',
+            'abstract.required' => 'Abstract harus diisi.',
+            'abstract.string' => 'Abstract harus berupa teks.',
+            'file.required' => 'File harus diunggah.',
+            'file.mimes' => 'File harus berformat PDF atau DOCX.',
+            'file.max' => 'Ukuran file maksimal 20MB.',
+            'pkm_id.required' => 'PKM ID harus diisi.'
         ]);
 
+        
         $user = Auth::user();
 
-        // Pastikan user memiliki tim_id sebelum menyimpan proposal
-        if (!$user->tim_id) {
-            return redirect()->back()->with('error', 'Anda belum bergabung dengan tim.');
-        }
+        // if (!$user->tim_id) {
+        //     return redirect()->back()->with('error', 'Anda belum bergabung dengan tim.');
+        // }
 
         // Ambil nama ketua tim
         $ketuaName = Str::slug($user->nama_lengkap, '_'); // Ubah nama ketua jadi format slug (_)
@@ -81,7 +97,7 @@ class ProposalController extends Controller
         $filename = "{$date}_{$ketuaName}_{$judulProposal}_{$uuid}.{$request->file('file')->getClientOriginalExtension()}";
 
         // Simpan file ke folder 'proposal'
-        $path = $request->file('file')->storeAs('proposal', $filename);
+        $path = $request->file('file')->storeAs('proposals', $filename);
 
         // Simpan data ke database
         ProposalModel::create([
@@ -89,10 +105,11 @@ class ProposalController extends Controller
             'abstract' => $request->abstract,
             'tim_id' => $user->tim_id,
             'status' => 'pending',
-            'file_path' => $path, // Simpan path file
+            'file_path' => $path, 
+            'pkm_id' => $request->pkm_id
         ]);
 
-        return redirect()->back()->with('success', 'Proposal berhasil diunggah.');
+        return redirect()->route('proposal.index', Auth::user()->tim_id)->with('success', 'Proposal berhasil diunggah.');
     }
     public function edit()
     {

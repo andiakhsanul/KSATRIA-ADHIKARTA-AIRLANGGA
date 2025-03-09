@@ -8,45 +8,45 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    public function viewFile(Request $request, $folder, $filename)
+    public function viewFile($folder, $filename)
     {
-        // Ensure the user is logged in and has role_id == 1
         if (!Auth::check()) {
             abort(403, 'Unauthorized');
         }
 
-        // Ensure the folder is one of the allowed folders
-        $allowedFolders = ['reviews', 'proposals', 'revisi'];
+        $allowedFolders = ['reviews', 'proposals', 'revisions'];
         if (!in_array($folder, $allowedFolders)) {
             abort(400, 'Invalid folder');
         }
 
-        // Construct the full file path
-        $path = storage_path("app/private/{$folder}/{$filename}");
+        $fullPath = storage_path("app/private/{$folder}/{$filename}");
 
-        // Check if the file exists
-        if (!file_exists($path)) {
-            abort(404);
+        if (!file_exists($fullPath)) {
+            return response()->json([
+                'error' => 'File not found',
+                'checked_path' => $fullPath
+            ], 404);
         }
 
-        // Serve the file
-        return response()->file($path);
+        return response()->file($fullPath);
     }
 
-    public function downloadFile(Request $request, $folder, $filename)
+
+
+    public function downloadFile(Request $request, $file_path)
     {
-        // Ensure the user is logged in and has role_id == 1
         if (!Auth::check()) {
             abort(403, 'Unauthorized');
         }
 
-        // Ensure the folder is valid
-        $allowedFolders = ['reviews', 'proposals', 'revisi'];
-        if (!in_array($folder, $allowedFolders)) {
-            abort(400, 'Invalid folder');
+        // Cek apakah file ada di storage
+        if (!Storage::exists("private/{$file_path}")) {
+            return response()->json([
+                'error' => 'File not found',
+                'checked_path' => storage_path("app/private/{$file_path}")
+            ], 404);
         }
 
-        // Secure file download
-        return Storage::download("private/{$folder}/{$filename}");
+        return Storage::download("private/{$file_path}");
     }
 }

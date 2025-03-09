@@ -38,7 +38,7 @@ class TimController extends Controller
         // Simpan data tim
         $tim = TimModel::create([
             'ketua_id' => Auth::id(),
-            'nama_tim' => $request->nama_tim,
+            'nama_tim' => str_replace(' ', '-', $request->nama_tim),
             'proposal_path' => $proposalPath
         ]);
 
