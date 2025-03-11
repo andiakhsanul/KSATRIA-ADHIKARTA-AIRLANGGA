@@ -43,7 +43,7 @@
 
     <!-- Search and filter tools -->
     <div class="mb-6 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-        <div class="relative">
+        {{-- <div class="relative">
             <input type="text" placeholder="Search users..."
                 class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-64">
             <svg xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-        </div>
+        </div> --}}
         <div class="flex gap-2">
             <form method="GET" class="flex gap-2">
                 <select name="role_id"
@@ -82,7 +82,7 @@
     <!-- Users table -->
     <div class="bg-white rounded-lg shadow-md overflow-x-auto">
         <div class="min-w-max">
-            <table class="w-full">
+            <table class="w-full" id="users-table">
                 <thead>
                     <tr class="bg-gray-50 border-b border-gray-200">
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">#</th>
@@ -351,6 +351,51 @@
         </form>
     </x-modal>
 
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.querySelector("input[type='text']");
+            const usersTable = document.getElementById("users-table"); // Ensure your table has this ID
 
+            searchInput.addEventListener("keyup", function() {
+                const query = this.value.trim().toLowerCase();
+
+                fetchUsers(query);
+            });
+
+            function fetchUsers(query) {
+                fetch(`/user/all?search=${query}`)
+                    .then(response => response.text()) // Use .text() instead of .json() to debug
+                    .then(data => {
+                        console.log("Response Data:", data); // Log the full response
+                        try {
+                            const jsonData = JSON.parse(data);
+                            updateTable(jsonData);
+                        } catch (error) {
+                            console.error("Error parsing JSON:", error, "\nResponse:", data);
+                        }
+                    })
+                    .catch(error => console.error("Error fetching users:", error));
+            }
+
+            function updateTable(users) {
+                usersTable.innerHTML = ""; // Clear table before appending new rows
+
+                users.forEach(user => {
+                    let row = `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.nim || '-'}</td>
+                    <td>${user.nip || '-'}</td>
+                    <td>${user.nama_lengkap}</td>
+                    <td>${user.email}</td>
+                    <td>${user.nama_role}</td>
+                    <td>${user.status}</td>
+                </tr>
+            `;
+                    usersTable.innerHTML += row;
+                });
+            }
+        });
+    </script> --}}
 
 @endsection

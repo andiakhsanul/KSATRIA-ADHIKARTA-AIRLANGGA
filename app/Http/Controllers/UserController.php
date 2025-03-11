@@ -33,9 +33,22 @@ class UserController extends Controller
             $query->where('users.role_id', $request->role_id);
         }
 
-        $users = $query->paginate(10)->withQueryString(); // Agar pagination mempertahankan filter
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('users.nama_lengkap', 'like', "%$search%")
+                  ->orWhere('users.email', 'like', "%$search%")
+                  ->orWhere('users.nim', 'like', "%$search%")
+                  ->orWhere('users.nip', 'like', "%$search%");
+            });
+        }
 
-        // Ambil daftar role untuk dropdown
+        if ($request->ajax()) {
+            return response()->json($query->get());
+        }
+
+        $users = $query->paginate(10)->withQueryString();
         $roles = DB::table('role')->select('id', 'nama_role')->get();
 
         return view('Operator.User.index', compact('users', 'roles'));
