@@ -19,7 +19,9 @@ class ReviewerAssignmentController extends Controller
             $query->where('nama_role', 'Reviewer');
         })->with(['teamsReviewed.proposals', 'teamsReviewed.jenisPkm'])->get();
 
-        return view('Reviewer.index', compact('reviewers'));
+        $teams = TimModel::with(['jenisPkm', 'reviewers'])->get();
+
+        return view('Reviewer.index', compact('reviewers', 'teams'));
     }
 
 
@@ -27,15 +29,30 @@ class ReviewerAssignmentController extends Controller
     {
         $request->validate([
             'reviewer_id' => 'required|exists:users,id',
-            'tim_ids' => 'required|array', // Accept multiple team IDs
+            'tim_ids' => 'required|array',
             'tim_ids.*' => 'exists:tim,id',
         ]);
 
-        $reviewer = User::find($request->reviewer_id);
-        $reviewer->teamsReviewed()->syncWithoutDetaching($request->tim_ids); // Assign multiple teams
+        $reviewer = User::findOrFail($request->reviewer_id);
+        $assignedTeams = [];
 
-        return redirect()->route('reviewers.assign')->with('success', 'Reviewer assigned successfully!');
+        foreach ($request->tim_ids as $tim_id) {
+            // Cek jumlah reviewer yang sudah ada untuk tim ini
+            $reviewerCount = DB::table('reviewer_tim')->where('tim_id', $tim_id)->count();
+
+            if ($reviewerCount < 2) {
+                $assignedTeams[] = $tim_id;
+            }
+        }
+
+        if (!empty($assignedTeams)) {
+            $reviewer->teamsReviewed()->syncWithoutDetaching($assignedTeams);
+            return redirect()->route('reviewers.assign')->with('success', 'Reviewer assigned successfully!');
+        } else {
+            return redirect()->route('reviewers.assign')->with('error', 'Each team can only have up to 2 reviewers.');
+        }
     }
+
 
     public function deleteAssignment($reviewer_id, $team_id)
     {
@@ -52,9 +69,11 @@ class ReviewerAssignmentController extends Controller
         $reviewers = User::whereHas('role', function ($query) {
             $query->where('nama_role', 'Reviewer');
         })->get();
-        $teams = TimModel::with('jenisPkm')
-            ->whereDoesntHave('reviewers')
-            ->get();
+        $teams = TimModel::with('jenisPkm', 'reviewers')
+            ->get()
+            ->filter(function ($team) {
+                return count($team->reviewers) < 2; 
+            });
         $pkmTypes = JenisPKMModel::select('id', 'nama_pkm')->get();
 
         return view('Reviewer.assign', compact('reviewers', 'teams', 'pkmTypes'));

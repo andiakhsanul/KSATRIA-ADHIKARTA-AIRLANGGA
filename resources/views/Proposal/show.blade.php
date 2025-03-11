@@ -37,27 +37,6 @@
                     Lihat file
                 </a>
             </div>
-
-            <div class="flex items-center">
-                <span class="text-sm text-gray-500 mr-2 font-medium">Status:</span>
-                @if ($proposal->status == 'approved')
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                        Approved
-                    </span>
-                @elseif($proposal->status == 'rejected')
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
-                        Rejected
-                    </span>
-                @elseif($proposal->status == 'pending')
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                        Pending
-                    </span>
-                @else
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
-                        {{ $proposal->status }}
-                    </span>
-                @endif
-            </div>
         </div>
 
         <!-- Reviews Section -->
