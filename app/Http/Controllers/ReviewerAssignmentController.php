@@ -19,7 +19,7 @@ class ReviewerAssignmentController extends Controller
             $query->where('nama_role', 'Reviewer');
         })->with(['teamsReviewed.proposals', 'teamsReviewed.jenisPkm'])->get();
 
-        return view('reviewer.index', compact('reviewers'));
+        return view('Reviewer.index', compact('reviewers'));
     }
 
 
