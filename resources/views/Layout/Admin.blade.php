@@ -9,14 +9,14 @@
     <title>@yield('title')</title>
 </head>
 
-<body class="flex min-h-screen bg-gray-100">
+<body class="flex min-h-screen overflow-hidden bg-gray-100">
 
     <!-- Sidebar -->
     @include('Components.sidebar')
 
     <!-- Main Content -->
     <div class="flex-1 p-6 text-black ml-64 lg:ml-0">
-        {{-- header --}}
+
         <div class="header mb-5">
             <h1 class="text-2xl font-bold text-gray-800">@yield('content-title')</h1>
         </div>
