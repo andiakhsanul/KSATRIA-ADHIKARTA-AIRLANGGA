@@ -15,25 +15,37 @@ class ProposalController extends Controller
     {
         $user = Auth::user();
 
-        // Operator
-        if ($user->role_id == 1) {
-            $proposals = ProposalModel::with(['tim', 'reviewers'])->latest()->get();
-        } elseif ($user->role_id == 2) {
-            // Reviewer hanya melihat proposal yang ditugaskan ke mereka
-            $proposals = ProposalModel::whereHas('reviewers', function ($query) use ($user) {
-                $query->where('reviewer_id', $user->id);
-            })->with(['tim', 'reviewers'])->latest()->get();
+        if ($user->role_id == 1) { // Operator melihat semua proposal
+            $proposals = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
+                ->with([
+                    'tim:id,nama_tim',
+                    'tim.reviewers:id,email,nama_lengkap'
+                ])
+                ->get();
+        } elseif ($user->role_id == 2) { // Dosen hanya melihat proposal yang dia review
+            $proposals = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
+                ->whereHas('tim.reviewers', function ($query) use ($user) {
+                    $query->where('reviewer_id', $user->id);
+                })
+                ->with([
+                    'tim:id,nama_tim',
+                    'tim.reviewers:id,email,nama_lengkap'
+                ])
+                ->get();
         } else {
             abort(403, 'Unauthorized');
         }
 
+
         return view('Operator.Proposal.index', compact('proposals'));
     }
+
+
 
     public function detailProposal($nama_tim, $proposal_id)
     {
         $proposal = ProposalModel::with('tim')
-            ->select('id', 'judul_proposal', 'abstract', 'status','tim_id', 'file_path')
+            ->select('id', 'judul_proposal', 'abstract', 'status', 'tim_id', 'file_path')
             ->where('id', $proposal_id)
             ->firstOrFail();
 
@@ -80,7 +92,7 @@ class ProposalController extends Controller
             'pkm_id.required' => 'PKM ID harus diisi.'
         ]);
 
-        
+
         $user = Auth::user();
 
         // if (!$user->tim_id) {
@@ -105,7 +117,7 @@ class ProposalController extends Controller
             'abstract' => $request->abstract,
             'tim_id' => $user->tim_id,
             'status' => 'pending',
-            'file_path' => $path, 
+            'file_path' => $path,
             'pkm_id' => $request->pkm_id
         ]);
 

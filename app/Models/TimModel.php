@@ -33,4 +33,14 @@ class TimModel extends Model
     {
         return $this->belongsToMany(User::class, 'reviewer_tim', 'tim_id', 'reviewer_id');
     }
+
+    public function jenisPkm()
+    {
+        return $this->belongsTo(JenisPKMModel::class, 'pkm_id');
+    }
+
+    public function proposals()
+    {
+        return $this->hasMany(ProposalModel::class, 'tim_id');
+    }
 }

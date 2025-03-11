@@ -23,6 +23,7 @@ class RegisterController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'nim' => 'nullable|string|unique:users|required_without:nip',
             'nip' => 'nullable|string|unique:users|required_without:nim',
+            'status' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -36,6 +37,7 @@ class RegisterController extends Controller
             'nim' => $request->nim,
             'nip' => $request->nip,
             'tim_id' => $request->tim_id,
+            'status' => 2,
             'role_id' => $request->nim ? 3 : ($request->nip ? 2 : null),
         ]);
 

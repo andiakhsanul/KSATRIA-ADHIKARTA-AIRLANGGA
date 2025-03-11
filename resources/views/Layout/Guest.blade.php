@@ -9,7 +9,7 @@
     <title>@yield('title')</title>
 </head>
 
-<body class="bg-black">
+<body class="bg-gray-50">
     @yield('content')
 
     <script>

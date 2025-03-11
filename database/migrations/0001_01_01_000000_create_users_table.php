@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nim')->unique()->nullable();
             $table->string('nip')->unique()->nullable();
             $table->string('email')->unique();
+            $table->integer('status');
 
             $table->foreignId('tim_id')->nullable()->constrained('tim')->onDelete('cascade');
             $table->foreignId('role_id')->references('id')->on('role')->onDelete('cascade');
