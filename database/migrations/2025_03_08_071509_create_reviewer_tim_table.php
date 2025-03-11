@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('tim_id')->constrained('tim')->onDelete('cascade'); // Assigned team
             $table->timestamps();
 
-            $table->unique('reviewer_id');
+            $table->unique(['reviewer_id', 'tim_id']);
         });
     }
 

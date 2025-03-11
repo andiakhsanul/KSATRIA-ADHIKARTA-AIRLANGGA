@@ -26,6 +26,7 @@ class User extends Authenticatable
         'nama_lengkap',
         'email',
         'password',
+        'status'
     ];
 
     /**
@@ -61,7 +62,14 @@ class User extends Authenticatable
         return $this->belongsToMany(TimModel::class, 'reviewer_tim', 'reviewer_id', 'tim_id');
     }
 
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(RoleModel::class);
     }
+
+    public function jenisPKMReviewed()
+    {
+        return $this->belongsToMany(JenisPKMModel::class, 'reviewer_jenis_pkm', 'reviewer_id', 'pkm_id');
+    }
+
 }

@@ -14,8 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            PKMSeeder::class,
             RoleSeeder::class,
-            PKMSeeder::class
+            StoredProcedureSeeder::class,
+            CountsSeeder::class,
+            // TimSeeder::class,
+            // UserSeeder::class,
         ]);
 
         User::create([
@@ -23,6 +27,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'operator@adhikarta.com',
             'password' => 'unair-adhikarta',
             'nim' => '1234567890',
+            'status' => 1, // accepted
             'role_id' => 1 // operator
         ]);
 
@@ -30,7 +35,8 @@ class DatabaseSeeder extends Seeder
         //     'nama_lengkap' => 'Muhammad Alif Adiawan',
         //     'email' => 'alifadiawan2005@gmail.com',
         //     'password' => '1234567890',
-        //     'nim' => '434231051',
+        //     'nim' => '000000000',
+        //     'status' => 2, // waiting
         //     'role_id' => 3 // tim
         // ]);
 
@@ -39,7 +45,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'arman@gmail.com',
         //     'password' => '1234567890',
         //     'nip' => '00217279182',
-        //     'role_id' => 2 // reviewer
+        //     'role_id' => 2, // reviewer
+        //     'status' => 1  // accepted
         // ]);
 
         // User::create([
@@ -47,7 +54,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'tessa@gmail.com',
         //     'password' => '1234567890',
         //     'nip' => '0878281729',
-        //     'role_id' => 2 // reviewer
+        //     'role_id' => 2, // reviewer
+        //     'status' => 1  // accepted
         // ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JenisPKMModel;
 use App\Models\TimModel;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +18,8 @@ class TimController extends Controller
     }
     public function create()
     {
-        return view('Tim.create');
+        $pkm = JenisPKMModel::select('id', 'nama_pkm')->get();
+        return view('Tim.create', compact('pkm'));
     }
     public function store(Request $request)
     {
@@ -28,6 +30,7 @@ class TimController extends Controller
             'anggota.*.nim' => 'nullable|string|unique:users,nim',
             'anggota.*.nip' => 'nullable|string|unique:users,nip',
             'anggota.*.email' => 'required|email|unique:users,email',
+            'pkm_id' => 'required'
         ]);
 
         $proposalPath = null;
@@ -39,7 +42,8 @@ class TimController extends Controller
         $tim = TimModel::create([
             'ketua_id' => Auth::id(),
             'nama_tim' => str_replace(' ', '-', $request->nama_tim),
-            'proposal_path' => $proposalPath
+            'proposal_path' => $proposalPath,
+            'pkm_id' => $request->pkm_id
         ]);
 
         // Ambil user yang sedang login
