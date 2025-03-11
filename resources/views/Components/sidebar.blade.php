@@ -1,6 +1,6 @@
     <!-- Sidebar -->
     <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-        class="fixed lg:relative top-0 left-0 z-40 h-screen w-64 bg-white border-r border-gray-200 shadow-sm transition-transform duration-300 ease-in-out lg:translate-x-0">
+        class="fixed lg:relative top-0 left-0 z-40 min-h-screen w-64 bg-white border-r border-gray-200 shadow-sm transition-transform duration-300 ease-in-out lg:translate-x-0">
 
         <!-- Logo / Header -->
         <div class="flex items-center justify-center h-16 border-b border-gray-100">

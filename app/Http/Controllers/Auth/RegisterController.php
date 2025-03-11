@@ -40,10 +40,7 @@ class RegisterController extends Controller
             'role_id' => $request->nim ? 3 : ($request->nip ? 2 : null),
         ]);
 
-        if (Auth::check()) {
-            return redirect()->back()->with('success', 'User added successfully');
-        }
-
         return redirect()->route('login')->with('success', 'Registrasi Berhasil !');
     }
+
 }

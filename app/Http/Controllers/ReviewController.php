@@ -6,6 +6,7 @@ use App\Models\ReviewModel;
 use App\Models\TimModel;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
@@ -22,6 +23,7 @@ class ReviewController extends Controller
             'proposal_id' => $proposal_id,
             'comments' => $request->comments,
             'file' => $filePath,
+            'user_id' => Auth::id(),
             'status' => 'pending',
         ]);
 

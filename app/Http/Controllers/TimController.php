@@ -29,9 +29,7 @@ class TimController extends Controller
             'proposal' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'anggota.*.nama_lengkap' => 'required|string|max:255',
             'anggota.*.nim' => 'nullable|string|unique:users,nim',
-            'anggota.*.nip' => 'nullable|string|unique:users,nip',
-            'anggota.*.email' => 'required|email|unique:users,email',
-            'pkm_id' => 'required'
+            'pkm_id' => 'required',
         ]);
 
         $proposalPath = null;
@@ -60,11 +58,9 @@ class TimController extends Controller
                 'nama_lengkap' => $anggota['nama_lengkap'],
                 'nim' => $anggota['nim'] ?? null,
                 'nip' => $anggota['nip'] ?? null,
-                'email' => $anggota['email'],
                 'tim_id' => $tim->id,
                 'status' => 2, // menunggu di konfirmasi
                 'role_id' => 3, // tim
-                'password' => bcrypt('password123')
             ]);
         }
 
@@ -95,7 +91,6 @@ class TimController extends Controller
                     User::create([
                         'nama_lengkap' => $anggota['nama'],
                         'nim' => $anggota['nim'],
-                        'email' => $anggota['email'],
                         'tim_id' => $tim->id,
                         'password' => bcrypt('password123'), // Default password
                     ]);
@@ -117,13 +112,18 @@ class TimController extends Controller
         // Cek apakah user dengan NIM ini sudah ada
         $user = User::where('nim', $data['nim'])->first();
 
-        if (!$user) {
-            // Jika belum ada, buat user baru
+        if ($user) {
+            // Jika user sudah memiliki tim, kembalikan error
+            if (!is_null($user->tim_id)) {
+                return back()->with('error', 'Anggota sudah join tim');
+            }
+        } else {
+            // Jika user belum ada, buat user baru
             $user = new User();
             $user->nama_lengkap = $data['nama_lengkap'];
             $user->nim = $data['nim'];
-            $user->email = $data['email'];
             $user->role_id = 3;
+            $user->status = 1;
         }
 
         // Set tim_id dan simpan
@@ -133,18 +133,17 @@ class TimController extends Controller
         return redirect()->back()->with('success', 'Anggota berhasil ditambahkan.');
     }
 
+
     public function editAnggota(Request $request, $tim_id, $user_id)
     {
         $request->validate([
             'nama_lengkap' => 'required|string|max:255',
             'nim' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
         ]);
 
         $user = User::findOrFail($user_id);
         $user->nama_lengkap = $request->nama_lengkap;
         $user->nim = $request->nim;
-        $user->email = $request->email;
         $user->save();
 
         return redirect()->back()

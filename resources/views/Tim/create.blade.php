@@ -80,12 +80,6 @@
                                     class="w-full p-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-700"
                                     required>
                             </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-400 mb-1">Email</label>
-                                <input type="email" name="anggota[0][email]"
-                                    class="w-full p-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-700"
-                                    required>
-                            </div>
                         </div>
                     </div>
                 </div>

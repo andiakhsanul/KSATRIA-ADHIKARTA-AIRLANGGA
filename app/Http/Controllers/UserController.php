@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoleModel;
+use App\Models\TimModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,11 +21,11 @@ class UserController extends Controller
             'users.nama_lengkap',
             'users.email',
             'users.status',
+            'role.id as role_id',
             'role.nama_role',
-            DB::raw('IF(tim.ketua_id IS NOT NULL, 1, 0) AS isKetua') // Tambahkan kolom isKetua
+            DB::raw('(EXISTS (SELECT 1 FROM tim WHERE tim.ketua_id = users.id)) AS isKetua') // Optimized check
         ])
             ->join('role', 'users.role_id', '=', 'role.id')
-            ->leftJoin('tim', 'users.id', '=', 'tim.ketua_id')
             ->orderBy('users.created_at', 'desc');
 
         // Filter berdasarkan role_id jika ada
@@ -50,17 +51,18 @@ class UserController extends Controller
     {
         $request->validate([
             'nim' => 'required|string|unique:users,nim|max:15',
-            'name' => 'required|string|max:255',
+            'nama_lengkap' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-            'role_id' => 'required|integer|exists:roles,id'
+            'role_id' => 'required|integer|exists:role,id'
         ]);
 
         User::create([
             'nim' => $request->nim,
-            'name' => $request->name,
+            'nama_lengkap' => $request->nama_lengkap,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'status' => 1,
             'role_id' => $request->role_id
         ]);
 
@@ -130,7 +132,14 @@ class UserController extends Controller
             return redirect()->route('user.index')->with('error', 'User not found.');
         }
 
+        $isKetua = TimModel::where('ketua_id', $id)->exists();
+
+        if ($isKetua) {
+            return redirect()->route('user.index')->with('error', $user->nama_lengkap . ' adalah ketua dan tidak bisa dihapus.');
+        }
+
         $user->delete();
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
+
 }
