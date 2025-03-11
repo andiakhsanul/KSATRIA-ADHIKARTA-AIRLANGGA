@@ -9,25 +9,36 @@ use App\Http\Controllers\ReviewerAssignmentController;
 use App\Http\Controllers\RevisiController;
 use App\Http\Controllers\TimController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\CheckAuthMiddleware;
 use App\Http\Middleware\OperatorMiddleware;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware('guest')->group(function(){
+Route::middleware('guest')->group(function () {
     Route::get('/', [LoginController::class, 'index'])->name('login');
     Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('login.authenticate');
-    
+
     Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
     Route::post('/register/create', [RegisterController::class, 'register'])->name('register');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', AuthMiddleware::class])->group(function () {
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $hitung = DB::select('CALL GetUserCounts()');
+        $counts = DB::select('Call GetCounts()');
+
+        return view('dashboard', [
+            'users' => $hitung[0]->total_users,
+            'approved_users' => $hitung[0]->approved_users,
+            'total_proposal' => $counts[0]->total_proposals,
+            'total_tim' => $counts[0]->total_teams,
+        ]);
     });
 
     // Proposal Controller
@@ -42,7 +53,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/manajemen-proposal/all', [ProposalController::class, 'indexOperator'])->name('operator.proposal.index');
     Route::get('/manajemen-proposal/detail/{nama_tim}/{proposal_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
 
-    Route::get('/reviewer-proposal/all', [ProposalController::class, 'indexReviewer'])->name('reviewer.proposal.index');
+    Route::get('/reviewers', [ReviewerAssignmentController::class, 'index'])->name('reviewers.index');
+    Route::get('/reviewers/assign-reviewer', [ReviewerAssignmentController::class, 'showAssignForm'])->name('reviewers.assign');
+    Route::post('/assign-reviewer', [ReviewerAssignmentController::class, 'assign'])->name('reviewer.assign.save');
+    Route::delete('/reviewer/assignment/{reviewer_id}/{team_id}', [ReviewerAssignmentController::class, 'deleteAssignment'])
+        ->name('reviewer.assignment.delete');
+
 
     // file controller
     Route::get('/file/view/{folder}/{filename}', [FileController::class, 'viewFile'])->name('file.view');
@@ -81,6 +97,8 @@ Route::middleware(['auth', 'operator'])->group(function () {
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+    Route::post('/approve-user/{id}', [UserController::class, 'approveUser'])->name('user.approve');
+    Route::post('/decline-user/{id}', [UserController::class, 'declineUser'])->name('user.decline');
 
 
     // Reviewer Assigment

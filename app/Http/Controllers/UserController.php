@@ -5,21 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\RoleModel;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::select(['users.id', 'users.nim', 'users.nip','users.nama_lengkap', 'users.email', 'role.nama_role'])
+        $query = User::select(['users.id', 'users.nim', 'users.nip', 'users.nama_lengkap', 'users.email', 'users.status','role.nama_role'])
             ->join('role', 'users.role_id', '=', 'role.id')
-            ->orderBy('users.created_at', 'desc')
-            ->paginate(10);
+            ->orderBy('users.created_at', 'desc');
 
+        // Filter berdasarkan role_id jika ada
+        if ($request->filled('role_id')) {
+            $query->where('users.role_id', $request->role_id);
+        }
 
-        return view('Operator.User.index', compact('users'));
+        $users = $query->paginate(10)->withQueryString(); // Agar pagination mempertahankan filter
+
+        // Ambil daftar role untuk dropdown
+        $roles = DB::table('role')->select('id', 'nama_role')->get();
+
+        return view('Operator.User.index', compact('users', 'roles'));
     }
+
 
     public function create()
     {
@@ -45,6 +55,21 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('user.index')->with('success', 'User created successfully.');
+    }
+
+    public function approveUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['status' => 1]);
+
+        return redirect()->back()->with('success', 'User berhasil disetujui.');
+    }
+    public function declineUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['status' => 3]);
+
+        return redirect()->back()->with('success', 'User berhasil ditolak.');
     }
 
     public function edit($id)
