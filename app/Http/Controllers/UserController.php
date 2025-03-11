@@ -13,8 +13,18 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::select(['users.id', 'users.nim', 'users.nip', 'users.nama_lengkap', 'users.email', 'users.status','role.nama_role'])
+        $query = User::select([
+            'users.id',
+            'users.nim',
+            'users.nip',
+            'users.nama_lengkap',
+            'users.email',
+            'users.status',
+            'role.nama_role',
+            DB::raw('IF(tim.ketua_id IS NOT NULL, 1, 0) AS isKetua') // Tambahkan kolom isKetua
+        ])
             ->join('role', 'users.role_id', '=', 'role.id')
+            ->leftJoin('tim', 'users.id', '=', 'tim.ketua_id')
             ->orderBy('users.created_at', 'desc');
 
         // Filter berdasarkan role_id jika ada
@@ -112,9 +122,9 @@ class UserController extends Controller
     }
 
     // ✅ Delete User (Check Existence First)
-    public function delete($nim)
+    public function delete($id)
     {
-        $user = User::where('nim', $nim)->first();
+        $user = User::where('id', $id)->first();
 
         if (!$user) {
             return redirect()->route('user.index')->with('error', 'User not found.');

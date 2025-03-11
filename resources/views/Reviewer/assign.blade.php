@@ -3,7 +3,7 @@
     <h2 class="text-xl font-bold text-gray-800 mb-6">Assign Reviewer to Team</h2>
 
     <div class="mx-auto p-6 bg-white shadow-md rounded-md">
-
+        <!-- Success & Error Messages -->
         @if (session('success'))
             <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -14,7 +14,7 @@
             </div>
         @endif
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger p-4 mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -58,14 +58,17 @@
 
             <!-- Select Multiple Teams -->
             <div>
-                <label for="team" class="block text-sm font-medium text-gray-700">Select Teams:</label>
+                <label for="team" class="block text-sm font-medium text-gray-700">Select Teams (Max 2 Reviewers per
+                    Team):</label>
                 <select name="tim_ids[]" id="team" multiple
                     class="w-full h-52 mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                     @foreach ($teams as $team)
                         <option value="{{ $team->id }}" data-name="{{ strtolower($team->nama_tim) }}"
-                            data-pkm="{{ strtolower($team->jenisPkm->nama_pkm) }}"">
-                            {{ $team->nama_tim }} -
-                            {{ $team->jenisPkm->nama_pkm }}
+                            data-pkm="{{ strtolower($team->jenisPkm->nama_pkm) }}"
+                            data-reviewer-count="{{ count($team->reviewers) }}"
+                            {{ count($team->reviewers) >= 2 ? 'disabled' : '' }}>
+                            {{ $team->nama_tim }} - {{ $team->jenisPkm->nama_pkm }}
+                            ({{ count($team->reviewers) }}/2 Reviewers)
                         </option>
                     @endforeach
                 </select>
@@ -90,7 +93,7 @@
                     <ul class="list-disc pl-5 text-sm text-gray-600">
                         @forelse ($reviewer->teamsReviewed as $team)
                             <li class="flex justify-between items-center">
-                                <span>{{ $team->nama_tim }}</span>
+                                <span>{{ $team->nama_tim }} ({{ count($team->reviewers) }}/2 Reviewers)</span>
                                 <form
                                     action="{{ route('reviewer.assignment.delete', ['reviewer_id' => $reviewer->id, 'team_id' => $team->id]) }}"
                                     method="POST" onsubmit="return confirm('Are you sure?');">
@@ -106,7 +109,6 @@
                 </div>
             @endforeach
         </div>
-
     </div>
 
     <!-- JavaScript for Filtering -->
@@ -119,16 +121,14 @@
             teams.forEach(team => {
                 let name = (team.getAttribute("data-name") || "").toLowerCase().trim();
                 let pkm = (team.getAttribute("data-pkm") || "").toLowerCase().trim();
-
-                // Normalisasi input dan data PKM agar "-" dianggap spasi
-                let pkmNormalized = pkm.replace(/[-\s]+/g, " ");
-                let searchNormalized = pkmValue.replace(/[-\s]+/g, " ");
+                let reviewers = parseInt(team.getAttribute("data-reviewer-count"), 10);
 
                 let nameMatch = name.includes(searchValue) || searchValue === "";
-                let pkmMatch = (pkmValue === "" || pkmNormalized.includes(searchNormalized));
+                let pkmMatch = pkmValue === "" || pkm.includes(pkmValue);
 
-                team.style.display = nameMatch && pkmMatch ? "block" : "none";
+                team.style.display = nameMatch && pkmMatch && reviewers < 2 ? "block" : "none";
             });
         }
     </script>
+
 @endsection
