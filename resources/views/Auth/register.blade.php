@@ -9,6 +9,7 @@
             <p class="text-gray-600">Sign up for a new account</p>
         </div>
 
+        
         <form method="POST" action="{{ route('register') }}" class="space-y-4 py-2 pb-4" x-data="{ useNIM: true, loading: false }">
             @csrf
 
