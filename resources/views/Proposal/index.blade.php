@@ -69,34 +69,6 @@
                             </div>
 
                             <div class="flex items-center space-x-3">
-                                <!-- Status Badge -->
-                                @php
-                                    $statusClass = '';
-                                    $statusText = '';
-
-                                    switch ($item->status ?? 'pending') {
-                                        case 'approved':
-                                            $statusClass = 'bg-green-100 text-green-800';
-                                            $statusText = 'Disetujui';
-                                            break;
-                                        case 'rejected':
-                                            $statusClass = 'bg-red-100 text-red-800';
-                                            $statusText = 'Ditolak';
-                                            break;
-                                        case 'reviewed':
-                                            $statusClass = 'bg-blue-100 text-blue-800';
-                                            $statusText = 'Direview';
-                                            break;
-                                        default:
-                                            $statusClass = 'bg-yellow-100 text-yellow-800';
-                                            $statusText = 'Menunggu';
-                                    }
-                                @endphp
-
-                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusClass }}">
-                                    {{ $statusText }}
-                                </span>
-
                                 <!-- Toggle Button -->
                                 <button class="text-gray-400 hover:text-gray-600 transition"
                                     onclick="toggleDetails('proposal-details-{{ $item->id }}')">

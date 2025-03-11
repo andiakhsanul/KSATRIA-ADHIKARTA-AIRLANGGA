@@ -41,6 +41,6 @@ class TimModel extends Model
 
     public function proposals()
     {
-        return $this->hasMany(ProposalModel::class, 'tim_id');
+        return $this->hasMany(ProposalModel ::class, 'tim_id');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JenisPKMModel;
+use App\Models\ProposalModel;
 use App\Models\TimModel;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,6 +62,7 @@ class TimController extends Controller
                 'nip' => $anggota['nip'] ?? null,
                 'email' => $anggota['email'],
                 'tim_id' => $tim->id,
+                'status' => 2, // menunggu di konfirmasi
                 'role_id' => 3, // tim
                 'password' => bcrypt('password123')
             ]);

@@ -29,7 +29,8 @@ class ProposalController extends Controller
                 })
                 ->with([
                     'tim:id,nama_tim',
-                    'tim.reviewers:id,email,nama_lengkap'
+                    'tim.reviewers:id,email,nama_lengkap',
+                    'jenisPkm:id, nama_pkm'
                 ])
                 ->get();
         } else {
@@ -79,7 +80,6 @@ class ProposalController extends Controller
             'judul_proposal' => 'required|string|max:255',
             'abstract' => 'required|string',
             'file' => 'required|mimes:pdf,docx|max:20480', // Maksimal 20MB
-            'pkm_id' => 'required'
         ], [
             'judul_proposal.required' => 'Judul proposal harus diisi.',
             'judul_proposal.string' => 'Judul proposal harus berupa teks.',
@@ -89,15 +89,10 @@ class ProposalController extends Controller
             'file.required' => 'File harus diunggah.',
             'file.mimes' => 'File harus berformat PDF atau DOCX.',
             'file.max' => 'Ukuran file maksimal 20MB.',
-            'pkm_id.required' => 'PKM ID harus diisi.'
         ]);
 
 
         $user = Auth::user();
-
-        // if (!$user->tim_id) {
-        //     return redirect()->back()->with('error', 'Anda belum bergabung dengan tim.');
-        // }
 
         // Ambil nama ketua tim
         $ketuaName = Str::slug($user->nama_lengkap, '_'); // Ubah nama ketua jadi format slug (_)
@@ -118,7 +113,6 @@ class ProposalController extends Controller
             'tim_id' => $user->tim_id,
             'status' => 'pending',
             'file_path' => $path,
-            'pkm_id' => $request->pkm_id
         ]);
 
         return redirect()->route('proposal.index', Auth::user()->tim_id)->with('success', 'Proposal berhasil diunggah.');

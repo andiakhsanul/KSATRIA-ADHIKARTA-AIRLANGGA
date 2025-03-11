@@ -140,49 +140,38 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span class="font-medium">Submit Proposal</span>
+                        <span class="font-medium">My Proposal</span>
                         @if (request()->is('proposal/index*'))
                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto h-4 w-4 text-white" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
                             </svg>
                         @endif
                     </a>
                 @endif
 
-                <a href="{{ route('operator.proposal.index') }}"
-                    class="flex items-center px-4 py-2.5 rounded-md transition-colors group {{ request()->is('operator/proposal*') ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5 mr-3 {{ request()->is('operator/proposal*') ? 'text-white' : 'text-gray-500 group-hover:text-blue-600' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    <span class="font-medium">Proposal Review</span>
-                    @if (request()->is('operator/proposal*'))
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto h-4 w-4 text-white" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                @if (Auth::user()->role_id === 2)
+                    <a href="{{ route('operator.proposal.index') }}"
+                        class="flex items-center px-4 py-2.5 rounded-md transition-colors group {{ request()->is('operator/proposal*') ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 mr-3 {{ request()->is('operator/proposal*') ? 'text-white' : 'text-gray-500 group-hover:text-blue-600' }}"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
-                    @endif
-                </a>
+                        <span class="font-medium">Proposal Review</span>
+                        @if (request()->is('operator/proposal*'))
+                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto h-4 w-4 text-white" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        @endif
+                    </a>
+                @endif
 
-                <a href=""
-                    class="flex items-center px-4 py-2.5 rounded-md transition-colors group {{ request()->is('proposal/revisi*') ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5 mr-3 {{ request()->is('proposal/revisi*') ? 'text-white' : 'text-gray-500 group-hover:text-blue-600' }}"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    <span class="font-medium">Proposal Revisi</span>
-                    @if (request()->is('proposal/revisi*'))
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto h-4 w-4 text-white" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    @endif
-                </a>
+
             @endif
         </nav>
     </aside>

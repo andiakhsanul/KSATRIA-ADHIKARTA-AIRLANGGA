@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId(column: 'tim_id')->constrained('tim')->onDelete('cascade');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('file_path');
-            $table->foreignId( 'pkm_id')->constrained('jenis_pkm')->onDelete('cascade');
             $table->timestamps();
         });
     }
