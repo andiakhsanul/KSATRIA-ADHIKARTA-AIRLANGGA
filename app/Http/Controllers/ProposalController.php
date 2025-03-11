@@ -64,7 +64,7 @@ class ProposalController extends Controller
 
     public function show($id)
     {
-        $proposal = ProposalModel::with(['reviews', 'revisions'])->findOrFail($id);
+        $proposal = ProposalModel::with(['reviews', 'revisions', 'reviewers'])->findOrFail($id);
         return view('Proposal.show', compact('proposal'));
     }
 
