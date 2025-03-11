@@ -57,7 +57,7 @@ class ReviewerAssignmentController extends Controller
             ->get();
         $pkmTypes = JenisPKMModel::select('id', 'nama_pkm')->get();
 
-        return view('reviewer.assign', compact('reviewers', 'teams', 'pkmTypes'));
+        return view('Reviewer.assign', compact('reviewers', 'teams', 'pkmTypes'));
     }
 
 }
