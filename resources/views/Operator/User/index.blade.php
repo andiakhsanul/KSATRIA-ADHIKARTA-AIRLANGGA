@@ -16,7 +16,7 @@
         </button>
     </div>
 
-    <!-- Success message -->
+    <!-- message -->
     @if (session('success'))
         <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-sm flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -24,6 +24,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
             {{ session('success') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-sm flex items-center">
+            {{ session('error') }}
         </div>
     @endif
     @if ($errors->any())
@@ -86,7 +91,6 @@
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Name
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Ketua
-                            Tim
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email
                         </th>
@@ -104,8 +108,6 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $user->nim ?? $user->nip }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                                {{ $user->nama_lengkap }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 @if ($user->isKetua)
                                     ✅
@@ -113,7 +115,13 @@
                                     ❌
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $user->email }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                                {{ $user->nama_lengkap }}</td>
+                            @if (empty($user->email))
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">---</td>
+                            @else
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $user->email }}</td>
+                            @endif
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if ($user->status === 1)
                                     <div class="flex items-center">
@@ -234,9 +242,8 @@
 
     <!-- Modal for creating new users -->
     <x-modal id="createUser" title="Create New User">
-        <form method="POST" action="{{ route('register') }}" class="space-y-4 py-2 pb-4" x-data="{ useNIM: true, loading: false }">
+        <form method="POST" action="{{ route('user.store') }}" class="space-y-4 py-2 pb-4" x-data="{ useNIM: true, loading: false }">
             @csrf
-
             <div class="space-y-2">
                 <label for="nama_lengkap" class="block text-sm font-medium text-gray-700">Full Name</label>
                 <input id="nama_lengkap" name="nama_lengkap" type="text" value="{{ old('nama_lengkap') }}" required

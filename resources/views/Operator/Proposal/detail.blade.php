@@ -84,7 +84,7 @@
                     @foreach ($proposal->reviews as $review)
                         <div class="p-5 rounded-lg border border-gray-200 bg-gray-50 shadow-sm">
                             <div class="mb-4">
-                                <h4 class="text-gray-700 font-medium mb-2">Komentar:</h4>
+                                <h4 class="text-gray-700 font-medium mb-2">Komentar dari ....</h4>
                                 <p class="text-gray-600">{{ $review->comments }}</p>
 
                                 <div class="mt-3 text-xs text-gray-500 flex gap-4">

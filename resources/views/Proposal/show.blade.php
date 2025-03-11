@@ -40,27 +40,60 @@
         </div>
 
         <!-- Reviews Section -->
-        <div class="mb-10">
-            <h3 class="text-lg font-semibold mb-4 flex items-center text-gray-900">
+        <div class="mb-10 bg-white rounded-xl shadow-sm p-6">
+            <h3 class="text-lg font-semibold mb-5 flex items-center text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
-                Review dari Dosen
+                <span>Review dari</span>
             </h3>
 
-            @if (count($proposal->reviews) > 0)
-                <div class="space-y-4">
-                    @foreach ($proposal->reviews as $review)
-                        <div class="p-5 rounded-lg border border-gray-200 bg-gray-50">
-                            <div class="mb-3">
-                                <h4 class="text-gray-800 font-medium mb-2">Komentar:</h4>
-                                <p class="text-gray-700">{{ $review->comments }}</p>
+            <div class="mb-5 pl-7">
+                <ul class="list-disc text-gray-700">
+                    @forelse ($proposal->reviewers as $reviewer)
+                        <li class="mb-1">{{ $reviewer->nama_lengkap }} <span
+                                class="text-gray-500 text-sm">{{ $reviewer->email }}</span></li>
+                    @empty
+                        <li class="text-gray-500 italic">No reviewers assigned.</li>
+                    @endforelse
+                </ul>
+            </div>
 
-                                <div class="mt-3 text-xs text-gray-500 flex gap-4">
-                                    <p>Tanggal: {{ \Carbon\Carbon::parse($review->created_at)->format('d-m-Y') }}</p>
-                                    <p>Waktu: {{ \Carbon\Carbon::parse($review->created_at)->diffForHumans() }}</p>
+            @if (count($proposal->reviews) > 0)
+                <div class="space-y-5">
+                    @foreach ($proposal->reviews as $review)
+                        <div class="p-6 rounded-lg border border-gray-200 bg-gray-50 hover:border-gray-300 transition-all">
+                            <div class="mb-4">
+                                <h4 class="text-gray-800 font-medium mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-blue-600"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Komentar:
+                                </h4>
+                                <p class="text-gray-700 bg-white p-4 rounded border border-gray-100">{{ $review->comments }}
+                                </p>
+
+                                <div class="mt-4 text-xs text-gray-500 flex gap-6">
+                                    <p class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        {{ \Carbon\Carbon::parse($review->created_at)->format('d-m-Y') }}
+                                    </p>
+                                    <p class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        {{ \Carbon\Carbon::parse($review->created_at)->diffForHumans() }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -73,7 +106,7 @@
 
                                 <a href="{{ route('file.view', ['folder' => $folder, 'filename' => $filename]) }}"
                                     target="_blank"
-                                    class="inline-flex items-center px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-100 transition-colors text-blue-600">
+                                    class="inline-flex items-center px-4 py-2 rounded-md bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors text-blue-600 font-medium">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -84,13 +117,27 @@
                                     Lihat File Review
                                 </a>
                             @else
-                                <span class="text-gray-500 italic">Tidak ada file terlampir</span>
+                                <span class="text-gray-500 italic flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Tidak ada file terlampir
+                                </span>
                             @endif
                         </div>
                     @endforeach
                 </div>
             @else
-                <p class="text-gray-500 italic">Belum ada review</p>
+                <div class="text-center py-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-3" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p class="text-gray-500 italic">Belum ada review</p>
+                </div>
             @endif
         </div>
 
@@ -198,7 +245,7 @@
                 modal.classList.remove('hidden');
             }
         }
-    </script>   
+    </script>
 
 
 @endsection
