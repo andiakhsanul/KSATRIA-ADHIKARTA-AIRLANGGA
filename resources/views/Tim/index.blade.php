@@ -63,7 +63,7 @@
         <div class="mt-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-gray-800">Anggota Tim</h2>
-                @if ($tim->users->count() == 4)
+                @if ($tim->users->count() == 5)
                     <button disabled onclick="openModal('exampleModal')"
                         class="px-4 py-2.5 bg-zinc-300 hover:bg-zinc-400 text-white rounded-md transition-colors duration-200 flex items-center shadow-sm">
                         Maks 4 orang dalam 1 tim
