@@ -11,7 +11,6 @@ class RevisiController extends Controller
     public function store(Request $request, $proposal_id)
     {
         $request->validate([
-            'comments' => 'required|string',
             'file_revisi' => 'nullable|mimes:pdf,docx|max:20480',
         ]);
 
@@ -21,7 +20,6 @@ class RevisiController extends Controller
 
         RevisiModel::create([
             'proposal_id' => $proposal_id,
-            'comments' => $request->comments,
             'file_revisi' => $filePath,
             'submitted_by' => Auth::id(),
             'status' => 'pending',

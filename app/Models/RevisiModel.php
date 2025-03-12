@@ -18,4 +18,10 @@ class RevisiModel extends Model
     {
         return $this->belongsTo(User::class, 'submitted_by');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(CommentsModel::class, 'revisions_id');
+    }
+
 }

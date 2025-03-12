@@ -17,11 +17,10 @@ class AuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+            return redirect()->route(route: 'login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
         if (Auth::user()->status == 2) {
-            Auth::logout();
             return redirect()->route('login')->with('warning','Akun Anda masih menunggu persetujuan admin.');
         }
 
@@ -30,7 +29,6 @@ class AuthMiddleware
         }
 
         if (Auth::user()->status != 1) {
-            Auth::logout();
             return redirect()->route('login')->with('error', 'Akun Anda tidak memiliki izin untuk mengakses sistem.');
         }
 
