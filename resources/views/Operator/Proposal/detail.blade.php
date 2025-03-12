@@ -27,7 +27,14 @@
                         </span>
                     </div>
                 </div>
-                <a href="{{ asset($proposal->file_path) }}"
+
+                @php
+                    $fileParts = explode('/', $proposal->file_path);
+                    $folder = $fileParts[0]; // Extracts 'reviews', 'proposals', or 'revisi'
+                    $filename = $fileParts[1]; // Extracts the actual filename
+                @endphp
+
+                <a href="{{ route('file.view', ['folder' => $folder, 'filename' => $filename]) }}"
                     class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center"
                     target="_blank">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -208,7 +215,8 @@
                                                                 $filename = $fileParts[1]; // Extracts the actual filename
                                                             @endphp
 
-                                                            <a href="{{ route('file.view', ['folder' => $folder, 'filename' => $filename]) }}" target="_blank"
+                                                            <a href="{{ route('file.view', ['folder' => $folder, 'filename' => $filename]) }}"
+                                                                target="_blank"
                                                                 class="text-blue-600 hover:text-blue-800 text-xs flex items-center">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="h-3 w-3 mr-1" fill="none"

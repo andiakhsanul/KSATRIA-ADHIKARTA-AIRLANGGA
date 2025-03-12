@@ -42,7 +42,7 @@
             </div>
 
             <div class="space-y-2">
-                <label for="file" class="block text-gray-700 font-medium">File (PDF atau DOCX):</label>
+                <label for="file" class="block text-gray-700 font-medium">File (DOCX):</label>
                 <div class="flex items-center justify-center w-full">
                     <label for="file"
                         class="flex flex-col items-center justify-center w-full h-32 border-2 border-blue-200 border-dashed rounded-lg cursor-pointer bg-blue-50 hover:bg-blue-100 transition">
@@ -54,7 +54,7 @@
                                 </path>
                             </svg>
                             <p class="mb-2 text-sm text-gray-600"><span class="font-semibold">Klik untuk upload</span></p>
-                            <p class="text-xs text-gray-500">PDF atau DOCX (Maks. 10MB)</p>
+                            <p class="text-xs text-gray-500"> DOCX (Maks. 10MB)</p>
                         </div>
                         <input id="file" type="file" name="file" accept=".pdf,.docx" required class="hidden" />
                     </label>
