@@ -22,18 +22,6 @@
                 @enderror
             </div>
 
-            <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700">Pilih Identitas</label>
-                <div class="flex space-x-4">
-                    <button type="button" @click="useNIM = true"
-                        :class="useNIM ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
-                        class="w-1/2 rounded-md px-4 py-2 text-sm font-medium transition-all">NIM</button>
-                    <button type="button" @click="useNIM = false"
-                        :class="!useNIM ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'"
-                        class="w-1/2 rounded-md px-4 py-2 text-sm font-medium transition-all">NIP</button>
-                </div>
-            </div>
-
             <div class="space-y-2" x-show="useNIM">
                 <label for="nim" class="block text-sm font-medium text-gray-700">NIM</label>
                 <input id="nim" name="nim" type="text" value="{{ old('nim') }}"
@@ -41,17 +29,6 @@
                     class="w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
                     placeholder="123456789" />
                 @error('nim')
-                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="space-y-2" x-show="!useNIM">
-                <label for="nip" class="block text-sm font-medium text-gray-700">NIP</label>
-                <input id="nip" name="nip" type="text" value="{{ old('nip') }}"
-                    x-bind:required="!useNIM"
-                    class="w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                    placeholder="1987654321" />
-                @error('nip')
                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                 @enderror
             </div>

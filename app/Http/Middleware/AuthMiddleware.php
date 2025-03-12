@@ -20,15 +20,18 @@ class AuthMiddleware
             return redirect()->route(route: 'login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        if (Auth::user()->status == 2) {
+        if (Auth::check() && Auth::user()->status == 2) {
+            Auth::logout();
             return redirect()->route('login')->with('warning','Akun Anda masih menunggu persetujuan admin.');
         }
 
-        if (Auth::user()->status == 3) {
+        if (Auth::check() && Auth::user()->status == 3) {
+            Auth::logout();
             return redirect()->route('login')->with('error', 'Pendaftaran akun Anda telah ditolak.');
         }
 
-        if (Auth::user()->status != 1) {
+        if (Auth::check() && Auth::user()->status != 1) {
+            Auth::logout();
             return redirect()->route('login')->with('error', 'Akun Anda tidak memiliki izin untuk mengakses sistem.');
         }
 
