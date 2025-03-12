@@ -86,6 +86,7 @@
                                             </div>
                                         </div>
                                         @if ($review->file)
+                                        
                                             @php
                                                 $fileParts = explode('/', $review->file);
                                                 $folder = $fileParts[0]; // Extracts 'reviews', 'proposals', or 'revisi'
