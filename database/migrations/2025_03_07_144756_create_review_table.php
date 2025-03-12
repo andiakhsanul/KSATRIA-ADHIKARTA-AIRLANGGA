@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('revisi_id')->nullable()->constrained('revisi')->onDelete('cascade');
             $table->text('file')->nullable();
             $table->text('comments')->nullable();
-            $table->foreignId('user_id')->constrained('proposal')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
         });

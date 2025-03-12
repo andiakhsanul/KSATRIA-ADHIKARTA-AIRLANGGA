@@ -17,7 +17,10 @@ class ReviewerAssignmentController extends Controller
     {
         $reviewers = User::whereHas('role', function ($query) {
             $query->where('nama_role', 'Reviewer');
-        })->with(['teamsReviewed.proposals', 'teamsReviewed.jenisPkm'])->get();
+        })->with([
+            'teamsReviewed.proposals:id,judul_proposal,tim_id,status',
+            'teamsReviewed.jenisPkm:id,nama_pkm'
+        ])->get();
 
         $teams = TimModel::with(['jenisPkm', 'reviewers'])->get();
 
@@ -72,7 +75,7 @@ class ReviewerAssignmentController extends Controller
         $teams = TimModel::with('jenisPkm', 'reviewers')
             ->get()
             ->filter(function ($team) {
-                return count($team->reviewers) < 2; 
+                return count($team->reviewers) < 2;
             });
         $pkmTypes = JenisPKMModel::select('id', 'nama_pkm')->get();
 

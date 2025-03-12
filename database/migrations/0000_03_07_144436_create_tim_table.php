@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tim', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('ketua_id')->nullable();
-            $table->string('nama_tim');
+            $table->string('nama_tim')->unique()->collation('utf8mb4_bin');
             $table->text('proposal_path')->nullable();
             $table->foreignId( 'pkm_id')->constrained('jenis_pkm')->onDelete('cascade');
             $table->timestamps();

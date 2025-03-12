@@ -108,6 +108,8 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $user->nim ?? $user->nip }}
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                                {{ $user->nama_lengkap }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 @if ($user->isKetua)
                                     ✅
@@ -115,8 +117,6 @@
                                     ❌
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                                {{ $user->nama_lengkap }}</td>
                             @if (empty($user->email))
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">---</td>
                             @else

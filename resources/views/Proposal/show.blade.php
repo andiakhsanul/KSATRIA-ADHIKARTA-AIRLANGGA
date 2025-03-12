@@ -47,7 +47,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
-                <span>Review dari</span>
+                <span>Nama Dosen Reviewer</span>
             </h3>
 
             <div class="mb-5 pl-7">
@@ -72,7 +72,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
-                                    Komentar:
+                                    Komentar: {{ $review->user->nama_lengkap }}
                                 </h4>
                                 <p class="text-gray-700 bg-white p-4 rounded border border-gray-100">{{ $review->comments }}
                                 </p>
@@ -178,7 +178,13 @@
 
                                 <div class="flex flex-row justify-between">
                                     @if (!empty($revisi->file_revisi))
-                                        <a href="{{ asset('storage/' . $revisi->file_revisi) }}" target="_blank"
+                                        @php
+                                            $fileParts = explode('/', $revisi->file_revisi);
+                                            $folder = $fileParts[0]; // Extracts 'reviews', 'proposals', or 'revisi'
+                                            $filename = $fileParts[1]; // Extracts the actual filename
+                                        @endphp
+                                        <a href="{{ route('file.view', ['folder' => $folder, 'filename' => $filename]) }}"
+                                            target="_blank"
                                             class="inline-flex items-center px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-100 transition-colors text-green-600">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">

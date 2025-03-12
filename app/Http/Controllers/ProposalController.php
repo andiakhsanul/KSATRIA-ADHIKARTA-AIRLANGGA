@@ -15,28 +15,28 @@ class ProposalController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role_id == 1) { // Operator melihat semua proposal
-            $proposals = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
+        // Base query
+        $query = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
+            ->with([
+                'tim:id,nama_tim',
+            ]);
+
+        // Operator
+        if ($user->role_id == 1) {
+            $query->with(['tim.reviewers:id,email,nama_lengkap']);
+        } elseif ($user->role_id == 2) { // Dosen
+            $query->whereHas('tim.reviewers', function ($q) use ($user) {
+                $q->where('reviewer_id', $user->id);
+            })
                 ->with([
-                    'tim:id,nama_tim',
-                    'tim.reviewers:id,email,nama_lengkap'
-                ])
-                ->get();
-        } elseif ($user->role_id == 2) { // Dosen hanya melihat proposal yang dia review
-            $proposals = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
-                ->whereHas('tim.reviewers', function ($query) use ($user) {
-                    $query->where('reviewer_id', $user->id);
-                })
-                ->with([
-                    'tim:id,nama_tim',
                     'tim.reviewers:id,email,nama_lengkap',
-                    'jenisPkm:id, nama_pkm'
-                ])
-                ->get();
+                    'jenisPkm:id,nama_pkm'
+                ]);
         } else {
             abort(403, 'Unauthorized');
         }
 
+        $proposals = $query->paginate(10);
 
         return view('Operator.Proposal.index', compact('proposals'));
     }
@@ -45,8 +45,13 @@ class ProposalController extends Controller
 
     public function detailProposal($nama_tim, $proposal_id)
     {
-        $proposal = ProposalModel::with('tim')
-            ->select('id', 'judul_proposal', 'abstract', 'status', 'tim_id', 'file_path')
+        $proposal = ProposalModel::with([
+            'tim:id,nama_tim,pkm_id',
+            'tim.reviewers:id,nama_lengkap',
+            'reviews:id,proposal_id,comments,user_id,file,created_at',
+            'reviews.user:id,nama_lengkap'
+        ])
+            ->select('id', 'judul_proposal', 'abstract', 'tim_id', 'file_path')
             ->where('id', $proposal_id)
             ->firstOrFail();
 
@@ -64,7 +69,16 @@ class ProposalController extends Controller
 
     public function show($id)
     {
-        $proposal = ProposalModel::with(['reviews', 'revisions', 'reviewers'])->findOrFail($id);
+        $proposal = ProposalModel::with([
+            'tim:id,nama_tim,pkm_id',
+            'tim.reviewers:id,nama_lengkap',
+            'reviews:id,proposal_id,comments,user_id,file,created_at',
+            'reviews.user:id,nama_lengkap'
+        ])
+            ->select('id', 'judul_proposal', 'abstract', 'tim_id', 'file_path')
+            ->where('id', $id)
+            ->firstOrFail();
+        // return $proposal;
         return view('Proposal.show', compact('proposal'));
     }
 

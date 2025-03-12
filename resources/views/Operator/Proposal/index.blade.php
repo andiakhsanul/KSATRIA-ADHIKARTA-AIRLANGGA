@@ -1,9 +1,9 @@
 @extends('Layout.Admin')
-@section('title', 'Proposal - All')
-@section('content-title', 'Proposal - All')
+@section('title', 'Manajemen Proposal')
+@section('content-title', 'Manajemen Proposal')
 @section('content')
 
-    <div class="overflow-x-auto rounded-lg shadow-lg">
+    <div class="overflow-x-auto overflow-y-auto rounded-lg shadow-lg">
         <table class="w-full bg-white text-gray-800 border border-gray-200 rounded-lg">
             <thead class="bg-gray-50">
                 <tr>
@@ -63,5 +63,6 @@
         </table>
     </div>
 
+    {{ $proposals->links() }}
 
 @endsection
