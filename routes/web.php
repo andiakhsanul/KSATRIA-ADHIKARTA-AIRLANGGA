@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ReviewController;
@@ -75,7 +76,7 @@ Route::middleware(['auth', AuthMiddleware::class])->group(function () {
     Route::get('/manajemen-proposal/all', [ProposalController::class, 'indexOperator'])->name('operator.proposal.index');
     Route::get('/manajemen-proposal/detail/{nama_tim}/{proposal_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
 
-
+    Route::post('/comments/{revisi_id}', [CommentsController::class, 'store'])->name('kirim.komentar');
 });
 
 

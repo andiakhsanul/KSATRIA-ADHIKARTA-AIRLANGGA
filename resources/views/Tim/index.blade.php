@@ -63,14 +63,22 @@
         <div class="mt-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-gray-800">Anggota Tim</h2>
-                <button onclick="openModal('exampleModal')"
-                    class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 flex items-center shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Tambah Anggota
-                </button>
+                @if ($tim->users->count() == 4)
+                    <button disabled onclick="openModal('exampleModal')"
+                        class="px-4 py-2.5 bg-zinc-300 hover:bg-zinc-400 text-white rounded-md transition-colors duration-200 flex items-center shadow-sm">
+                        Maks 4 orang dalam 1 tim
+                    </button>
+                @else
+                    <button onclick="openModal('exampleModal')"
+                        class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 flex items-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Tambah Anggota
+                    </button>
+                @endif
+
             </div>
 
             <div class="bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm">
@@ -136,7 +144,8 @@
                                     @csrf
                                     <div class="space-y-4 p-5 bg-blue-50 border border-blue-100 rounded-lg">
                                         <div>
-                                            <label class="text-sm font-medium text-gray-700 mb-1 block">Nama Lengkap</label>
+                                            <label class="text-sm font-medium text-gray-700 mb-1 block">Nama
+                                                Lengkap</label>
                                             <input type="text" name="nama_lengkap"
                                                 class="w-full p-3 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                                                 value="{{ $user->nama_lengkap }}" required>

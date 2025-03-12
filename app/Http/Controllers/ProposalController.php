@@ -49,7 +49,10 @@ class ProposalController extends Controller
             'tim:id,nama_tim,pkm_id',
             'tim.reviewers:id,nama_lengkap',
             'reviews:id,proposal_id,comments,user_id,file,created_at',
-            'reviews.user:id,nama_lengkap'
+            'reviews.user:id,nama_lengkap',
+            'revisions:id,proposal_id,file_revisi,status,submitted_by,created_at,updated_at', // Ensure revisions are loaded
+            'revisions.comments:id,user_id,revisions_id,comment,lampiran_revisi,created_at,updated_at',
+            'revisions.comments.user:id,nama_lengkap'
         ])
             ->select('id', 'judul_proposal', 'abstract', 'tim_id', 'file_path')
             ->where('id', $proposal_id)
@@ -73,12 +76,16 @@ class ProposalController extends Controller
             'tim:id,nama_tim,pkm_id',
             'tim.reviewers:id,nama_lengkap',
             'reviews:id,proposal_id,comments,user_id,file,created_at',
-            'reviews.user:id,nama_lengkap'
+            'reviews.user:id,nama_lengkap',
+            'revisions:id,proposal_id,file_revisi,status,submitted_by,created_at,updated_at', // Ensure revisions are loaded
+            'revisions.comments:id,user_id,revisions_id,comment,lampiran_revisi,created_at,updated_at',
+            'revisions.comments.user:id,nama_lengkap'
         ])
             ->select('id', 'judul_proposal', 'abstract', 'tim_id', 'file_path')
             ->where('id', $id)
             ->firstOrFail();
-        // return $proposal;
+
+
         return view('Proposal.show', compact('proposal'));
     }
 
