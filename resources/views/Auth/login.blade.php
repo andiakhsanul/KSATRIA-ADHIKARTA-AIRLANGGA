@@ -6,7 +6,7 @@
     <div class="flex min-h-screen items-center justify-center p-4 bg-gray-50">
         <div class="w-full max-w-md space-y-8 rounded-lg border border-gray-300 bg-white p-6 shadow-lg">
             
-            <img src="{{ asset('assets/unair-ditmawa.png') }}" alt="unair-ditmawa" class="max-w-96">
+            <img src="{{ asset('assets/unair-ditmawa.png') }}" alt="unair-ditmawa" class="w-full">
 
             <div class="text-center">
                 <h1 class="text-2xl font-bold text-gray-900">KSATRIA ADHIKARTA AIRLANGGA</h1>
@@ -74,6 +74,6 @@
         </div>
     </div>
 
-
+   
 
 @endsection
