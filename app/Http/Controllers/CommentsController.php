@@ -13,7 +13,7 @@ class CommentsController extends Controller
     public function store(Request $request, $revisi_id)
     {
         $data = $request->validate([
-            'lampiran_revisi' => 'nullable|file|mimes:pdf,docx|max:10000',
+            'lampiran_revisi' => 'nullable|file|mimes:docx|max:10000',
             'comment' => 'nullable|string'
         ]);
 

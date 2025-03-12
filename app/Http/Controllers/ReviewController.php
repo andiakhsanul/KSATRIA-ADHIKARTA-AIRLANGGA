@@ -15,10 +15,10 @@ class ReviewController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'comments' => 'required|string',
-            'file' => 'nullable|mimes:pdf,docx|max:20480',
+            'file' => 'nullable|mimes:docx|max:20480',
         ], [
             'comments.required' => 'Komentar wajib diisi.',
-            'file.mimes' => 'File harus berformat PDF atau DOCX.',
+            'file.mimes' => 'File harus berformat DOCX.',
             'file.max' => 'Ukuran file maksimal 20MB.',
         ]);
 

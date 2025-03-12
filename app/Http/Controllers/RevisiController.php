@@ -11,7 +11,7 @@ class RevisiController extends Controller
     public function store(Request $request, $proposal_id)
     {
         $request->validate([
-            'file_revisi' => 'nullable|mimes:pdf,docx|max:20480',
+            'file_revisi' => 'nullable|mimes:docx|max:20480',
         ]);
 
         $filePath = $request->hasFile('file_revisi')

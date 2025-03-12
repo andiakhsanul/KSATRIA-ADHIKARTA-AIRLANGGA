@@ -100,7 +100,7 @@ class ProposalController extends Controller
         $validatedData = $request->validate([
             'judul_proposal' => 'required|string|max:255',
             'abstract' => 'required|string',
-            'file' => 'required|mimes:pdf,docx|max:20480', // Maksimal 20MB
+            'file' => 'required|mimes:docx|max:20480', // Maksimal 20MB
         ], [
             'judul_proposal.required' => 'Judul proposal harus diisi.',
             'judul_proposal.string' => 'Judul proposal harus berupa teks.',
@@ -108,7 +108,7 @@ class ProposalController extends Controller
             'abstract.required' => 'Abstract harus diisi.',
             'abstract.string' => 'Abstract harus berupa teks.',
             'file.required' => 'File harus diunggah.',
-            'file.mimes' => 'File harus berformat PDF atau DOCX.',
+            'file.mimes' => 'File harus berformat DOCX.',
             'file.max' => 'Ukuran file maksimal 20MB.',
         ]);
 
