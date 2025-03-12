@@ -31,4 +31,6 @@ class ProposalModel extends Model
     {
         return $this->belongsToMany(User::class, 'reviewer_tim', 'tim_id', 'reviewer_id');
     }
+
+
 }

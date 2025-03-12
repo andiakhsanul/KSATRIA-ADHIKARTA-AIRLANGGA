@@ -26,7 +26,6 @@ class AuthMiddleware
         }
 
         if (Auth::user()->status == 3) {
-            Auth::logout();
             return redirect()->route('login')->with('error', 'Pendaftaran akun Anda telah ditolak.');
         }
 

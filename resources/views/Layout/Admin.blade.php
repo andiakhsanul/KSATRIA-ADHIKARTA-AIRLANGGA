@@ -9,7 +9,7 @@
     <title>@yield('title')</title>
 </head>
 
-<body class="flex min-h-screen overflow-hidden bg-gray-100">
+<body class="flex min-h-screen overflow bg-gray-100">
 
     <!-- Sidebar -->
     @include('Components.sidebar')

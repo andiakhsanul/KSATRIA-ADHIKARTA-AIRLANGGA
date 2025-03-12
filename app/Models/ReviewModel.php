@@ -23,4 +23,9 @@ class ReviewModel extends Model
         return $this->belongsTo(User::class, 'reviewer_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

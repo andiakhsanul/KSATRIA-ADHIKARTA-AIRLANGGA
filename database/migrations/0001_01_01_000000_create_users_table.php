@@ -29,7 +29,7 @@ return new class extends Migration
         });
 
         Schema::table('tim', function (Blueprint $table) {
-            $table->foreign('ketua_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('ketua_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

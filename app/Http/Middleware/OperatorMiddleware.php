@@ -16,9 +16,9 @@ class OperatorMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::user()->role_id === 1) {
-            return redirect()->back()->with('error', 'Unauthorized');
+        if (Auth::user()->role_id === 1) {
+            return $next($request);
         }
-        return $next($request);
+        return redirect()->back()->with('error', 'Unauthorized');
     }
 }
