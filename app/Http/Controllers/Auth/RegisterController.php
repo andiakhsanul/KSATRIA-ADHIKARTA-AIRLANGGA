@@ -21,8 +21,7 @@ class RegisterController extends Controller
             'nama_lengkap' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'nim' => 'nullable|string|unique:users|required_without:nip',
-            'nip' => 'nullable|string|unique:users|required_without:nim',
+            'nim' => 'required|string|unique:users',
         ]);
 
         if ($validator->fails()) {
@@ -34,7 +33,6 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'nim' => $request->nim,
-            'nip' => $request->nip,
             'tim_id' => $request->tim_id,
             'status' => 2,
             'role_id' => $request->nim ? 3 : ($request->nip ? 2 : null),
