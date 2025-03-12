@@ -38,9 +38,9 @@ class UserController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('users.nama_lengkap', 'like', "%$search%")
-                  ->orWhere('users.email', 'like', "%$search%")
-                  ->orWhere('users.nim', 'like', "%$search%")
-                  ->orWhere('users.nip', 'like', "%$search%");
+                    ->orWhere('users.email', 'like', "%$search%")
+                    ->orWhere('users.nim', 'like', "%$search%")
+                    ->orWhere('users.nip', 'like', "%$search%");
             });
         }
 
@@ -63,7 +63,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nim' => 'required|string|unique:users,nim|max:15',
+            'nim' => 'nullable|string|unique:users,nim|max:15|required_without:nip',
+            'nip' => 'nullable|string|unique:users,nip|max:15|required_without:nim',
             'nama_lengkap' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
@@ -72,6 +73,7 @@ class UserController extends Controller
 
         User::create([
             'nim' => $request->nim,
+            'nip' => $request->nip,
             'nama_lengkap' => $request->nama_lengkap,
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -143,12 +145,6 @@ class UserController extends Controller
 
         if (!$user) {
             return redirect()->route('user.index')->with('error', 'User not found.');
-        }
-
-        $isKetua = TimModel::where('ketua_id', $id)->exists();
-
-        if ($isKetua) {
-            return redirect()->route('user.index')->with('error', $user->nama_lengkap . ' adalah ketua dan tidak bisa dihapus.');
         }
 
         $user->delete();

@@ -4,6 +4,16 @@
 @section('content')
 
     <!-- Proposal Header -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="bg-white text-gray-800 rounded-lg shadow-sm">
         <div class="border-b border-gray-200 pb-6 mb-8 p-6">
             <div class="mb-6">
@@ -63,18 +73,37 @@
         <!-- Reviews Section -->
         <div class="px-6 pb-6 mb-6">
             <div class="flex flex-row mb-4 justify-between items-center">
-                <h3 class="text-lg font-medium flex items-center text-gray-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-600" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
+                <h3 class="text-lg font-semibold flex items-center text-gray-900 space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                     </svg>
-                    Review dari Dosen
+                    <span>
+                        @if (Auth::user()->role_id === 1)
+                            Review Administrasi
+                        @else
+                            Review Substansi
+                        @endif
+                    </span>
                 </h3>
+
+                <div class="mt-2 flex flex-wrap gap-2">
+                    @foreach ($proposal->tim->reviewers as $reviewer)
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium">
+                            {{ $reviewer->nama_lengkap }}
+                        </span>
+                    @endforeach
+                </div>
+
                 @if (Auth::user()->role_id !== 3)
                     <button onclick="openModal('uploadReview')"
                         class="px-4 py-2 border border-blue-500 text-blue-600 rounded-md hover:bg-blue-50 font-medium transition-colors duration-150 ease-in-out">
-                        Upload Review
+                        @if (Auth::user()->role_id === 1)
+                            Berikan Review Administrasi
+                        @else
+                            Berikan Review Substansi
+                        @endif
                     </button>
                 @endif
             </div>
@@ -84,7 +113,8 @@
                     @foreach ($proposal->reviews as $review)
                         <div class="p-5 rounded-lg border border-gray-200 bg-gray-50 shadow-sm">
                             <div class="mb-4">
-                                <h4 class="text-gray-700 font-medium mb-2">Komentar dari ....</h4>
+                                <h4 class="text-gray-700 font-medium mb-2">Komentar dari {{ $review->user->nama_lengkap }}
+                                </h4>
                                 <p class="text-gray-600">{{ $review->comments }}</p>
 
                                 <div class="mt-3 text-xs text-gray-500 flex gap-4">
@@ -196,18 +226,6 @@
                                     </a>
                                 @else
                                     <span class="text-gray-500 italic text-sm">Tidak ada file terlampir</span>
-                                @endif
-
-                                @if (Auth::user()->role_id === 1)
-                                    <a href=""
-                                        class="inline-flex items-center px-3 py-1.5 rounded-md border border-red-300 text-red-600 hover:bg-red-50 transition duration-150 ease-in-out">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                        Delete
-                                    </a>
                                 @endif
                             </div>
                         </div>

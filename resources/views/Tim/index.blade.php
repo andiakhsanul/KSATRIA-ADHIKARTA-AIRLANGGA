@@ -46,7 +46,7 @@
     </x-modal>
 
     @if ($tim)
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6 mt-2">
             <h2 class="text-xl font-bold text-gray-800 mb-4">Informasi Tim</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>

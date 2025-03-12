@@ -8,6 +8,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewerAssignmentController;
 use App\Http\Controllers\RevisiController;
 use App\Http\Controllers\TimController;
+use App\Http\Controllers\TimManageController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\CheckAuthMiddleware;
@@ -50,16 +51,6 @@ Route::middleware(['auth', AuthMiddleware::class])->group(function () {
     Route::delete('/proposal/delete/{id}', [ProposalController::class, 'delete'])->name('proposal.delete');
     Route::get('/proposal/show/{id}', [ProposalController::class, 'show'])->name('proposal.show');
 
-    Route::get('/manajemen-proposal/all', [ProposalController::class, 'indexOperator'])->name('operator.proposal.index');
-    Route::get('/manajemen-proposal/detail/{nama_tim}/{proposal_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
-
-    Route::get('/reviewers', [ReviewerAssignmentController::class, 'index'])->name('reviewers.index');
-    Route::get('/reviewers/assign-reviewer', [ReviewerAssignmentController::class, 'showAssignForm'])->name('reviewers.assign');
-    Route::post('/assign-reviewer', [ReviewerAssignmentController::class, 'assign'])->name('reviewer.assign.save');
-    Route::delete('/reviewer/assignment/{reviewer_id}/{team_id}', [ReviewerAssignmentController::class, 'deleteAssignment'])
-        ->name('reviewer.assignment.delete');
-
-
     // file controller
     Route::get('/file/view/{folder}/{filename}', [FileController::class, 'viewFile'])->name('file.view');
     Route::get('/file/download/{folder}/{filename}', [FileController::class, 'downloadFile'])->name('file.download');
@@ -81,14 +72,14 @@ Route::middleware(['auth', AuthMiddleware::class])->group(function () {
     Route::post('/tim/{tim_id}/editAnggota/{user_id}', [TimController::class, 'editAnggota'])->name('tim.anggota.edit');
     Route::delete('/tim/{tim}/anggota/{user}', [TimController::class, 'removeAnggota'])->name('tim.anggota.remove');
 
-
-
+    Route::get('/manajemen-proposal/all', [ProposalController::class, 'indexOperator'])->name('operator.proposal.index');
+    Route::get('/manajemen-proposal/detail/{nama_tim}/{proposal_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
 
 
 });
 
 
-Route::middleware(['auth', 'operator'])->group(function () {
+Route::middleware(['operator'])->group(function () {
 
     // UserController
     Route::get('/user/all', [UserController::class, 'index'])->name('user.index');
@@ -100,10 +91,24 @@ Route::middleware(['auth', 'operator'])->group(function () {
     Route::post('/approve-user/{id}', [UserController::class, 'approveUser'])->name('user.approve');
     Route::post('/decline-user/{id}', [UserController::class, 'declineUser'])->name('user.decline');
 
-
     // Reviewer Assigment
     Route::get('/reviewer-assignments', [ReviewerAssignmentController::class, 'index'])->name('reviewer.assignments');
     Route::post('/reviewer-assignments', [ReviewerAssignmentController::class, 'assign'])->name('reviewer.assign');
     Route::delete('/reviewer-assignments', [ReviewerAssignmentController::class, 'remove'])->name('reviewer.remove');
+
+    // Manage TIm
+    Route::get('/manage-tim/all', [TimManageController::class, 'index'])->name('manage.tim.index');
+    Route::get('/manage-tim/show/{id}', [TimManageController::class, 'show'])->name('manage.tim.show');
+    Route::get('/manage-tim/edit/{id}', [TimManageController::class, 'edit'])->name('manage.tim.edit');
+    Route::delete('/manage-tim/delete/{id}', [TimManageController::class, 'delete'])->name('manage.tim.delete');
+
+
+    Route::get('/reviewers', [ReviewerAssignmentController::class, 'index'])->name('reviewers.index');
+    Route::get('/reviewers/assign-reviewer', [ReviewerAssignmentController::class, 'showAssignForm'])->name('reviewers.assign');
+    Route::post('/assign-reviewer', [ReviewerAssignmentController::class, 'assign'])->name('reviewer.assign.save');
+    Route::delete('/reviewer/assignment/{reviewer_id}/{team_id}', [ReviewerAssignmentController::class, 'deleteAssignment'])
+        ->name('reviewer.assignment.delete');
+
+
 
 });

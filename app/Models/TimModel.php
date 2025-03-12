@@ -16,7 +16,7 @@ class TimModel extends Model
 
     public function anggota()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'tim_id');
     }
 
     public function ketua()
