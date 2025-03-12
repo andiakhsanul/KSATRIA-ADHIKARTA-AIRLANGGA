@@ -7,6 +7,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     <title>@yield('title')</title>
+    <link rel="icon" href="{{ asset('assets/unair.png') }}">
 </head>
 
 <body class="bg-gray-50">
