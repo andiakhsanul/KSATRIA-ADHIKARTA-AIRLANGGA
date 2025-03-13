@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('nama_lengkap', 500)->change();
             $table->string('nim', 500)->nullable()->change();
-            $table->string('nip', 500)->unique()->nullable()->change();
+            $table->string('nip', 500)->nullable()->change(); // Do not add unique() here if it's already added
             $table->string('email', 500)->nullable()->change();
         });
     }
@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('nama_lengkap', 255)->change();
             $table->string('nim', 255)->nullable()->change();
-            $table->string('nip', 255)->unique()->nullable()->change();
+            $table->string('nip', 255)->nullable()->change();
             $table->string('email', 255)->nullable()->change();
         });
     }
