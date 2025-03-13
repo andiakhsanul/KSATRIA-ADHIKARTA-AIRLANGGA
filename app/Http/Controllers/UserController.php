@@ -63,8 +63,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nim' => 'nullable|string|unique:users,nim|max:15|required_without:nip',
-            'nip' => 'nullable|string|unique:users,nip|max:15|required_without:nim',
+            'nim' => 'nullable|string|unique:users,nim|max:50|required_without:nip',
+            'nip' => 'nullable|string|unique:users,nip|max:50|required_without:nim',
             'nama_lengkap' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
