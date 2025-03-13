@@ -41,6 +41,6 @@ class TimManageController extends Controller
     public function delete($id)
     {
         $data = TimModel::find($id)->delete();
-        return redirect()->route('tim.index')->with('success', 'Tim deleted successfully');
+        return redirect()->back()->with('success', 'Tim deleted successfully');
     }
 }
