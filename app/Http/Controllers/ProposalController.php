@@ -11,35 +11,39 @@ use Carbon\Carbon;
 
 class ProposalController extends Controller
 {
-    public function indexOperator()
+    public function indexOperator(Request $request)
     {
         $user = Auth::user();
+        $search = $request->input('search');
 
         // Base query
         $query = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
-            ->with([
-                'tim:id,nama_tim',
-            ]);
+            ->with(['tim:id,nama_tim']);
 
-        // Operator
-        if ($user->role_id == 1) {
+        // Apply search filter
+        if ($search) {
+            $query->where('judul_proposal', 'like', "%{$search}%");
+        }
+
+        // Role-based filtering
+        if ($user->role_id == 1) { // Operator
             $query->with(['tim.reviewers:id,email,nama_lengkap']);
         } elseif ($user->role_id == 2) { // Dosen
             $query->whereHas('tim.reviewers', function ($q) use ($user) {
                 $q->where('reviewer_id', $user->id);
-            })
-                ->with([
-                    'tim.reviewers:id,email,nama_lengkap',
-                    'jenisPkm:id,nama_pkm'
-                ]);
+            })->with([
+                        'tim.reviewers:id,email,nama_lengkap',
+                        'jenisPkm:id,nama_pkm'
+                    ]);
         } else {
             abort(403, 'Unauthorized');
         }
 
-        $proposals = $query->paginate(10);
+        $proposals = $query->paginate(10)->withQueryString(); // Preserve query string for pagination
 
         return view('Operator.Proposal.index', compact('proposals'));
     }
+
 
 
 

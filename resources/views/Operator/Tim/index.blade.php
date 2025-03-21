@@ -3,6 +3,33 @@
 @section('content-title', 'Manage Tim')
 @section('content')
 
+    <div class="mb-8 flex flex-col sm:flex-row gap-5 sm:items-center sm:justify-between">
+        <form method="GET" action="{{ route('manage.tim.index') }}" class="w-full sm:w-auto">
+            <div class="relative flex items-center">
+                <input type="text" placeholder="Search users..." name="search" value="{{ request('search') }}"
+                    class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-72 text-gray-700 bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <button type="submit"
+                    class="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg transition-colors duration-200 shadow-sm">
+                    Search
+                </button>
+
+                <!-- Reset Button (Only visible when search is active) -->
+                @if (request('search') || request('role_id'))
+                    <a href="{{ route('manage.tim.index') }}"
+                        class="ml-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-lg transition-colors duration-200 shadow-sm">
+                        Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>  
+
     <table class="w-full border-collapse rounded-lg overflow-hidden shadow-md my-4">
         <thead>
             <tr class="bg-blue-600 text-white">
@@ -22,11 +49,12 @@
                     <td class="px-4 py-3 border-r border-gray-100">{{ $t->ketua->nama_lengkap }}</td>
                     <td class="px-4 py-3 border-r border-gray-100">{{ $t->ketua->nim }}</td>
                     <td class="px-4 py-3 border-r border-gray-100">
-                        @foreach ($t->anggota as $item)
+                        @foreach ($t->anggota->reject(fn($item) => $item->id == $t->ketua_id) as $item)
                             <div class="py-1">
                                 <span class="inline-flex items-center">
                                     <span class="w-2 h-2 inline-block bg-blue-600 rounded-full mr-2"></span>
-                                    {{ $item->nama_lengkap }}
+                                    {{ $item->nama_lengkap }} <br> <span
+                                        class="text-sm text-gray-400">{{ $item->nim }}</span>
                                 </span>
                             </div>
                         @endforeach
