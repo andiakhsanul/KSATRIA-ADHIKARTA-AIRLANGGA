@@ -8,15 +8,22 @@ use Illuminate\Http\Request;
 
 class TimManageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
         $tim = TimModel::select('id', 'ketua_id', 'nama_tim', 'pkm_id')
+            ->when($search, function ($query, $search) {
+                $query->where('nama_tim', 'like', "%{$search}%"); // Search by team name
+            })
             ->with([
                 'anggota:id,nama_lengkap,nim,tim_id',
                 'jenisPkm:id,nama_pkm',
-                'ketua:id,nama_lengkap,nim' 
+                'ketua:id,nama_lengkap,nim'
             ])
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString(); // Preserve search query on pagination links
+
         return view('Operator.Tim.Index', compact('tim'));
     }
 
