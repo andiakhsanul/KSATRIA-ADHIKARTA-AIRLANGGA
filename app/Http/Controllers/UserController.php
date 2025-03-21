@@ -35,15 +35,14 @@ class UserController extends Controller
 
         // Search functionality
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('users.nama_lengkap', 'like', "%$search%")
-                    ->orWhere('users.email', 'like', "%$search%")
-                    ->orWhere('users.nim', 'like', "%$search%")
-                    ->orWhere('users.nip', 'like', "%$search%");
+            $searchTerm = '%' . $request->search . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('users.nama_lengkap', 'like', $searchTerm)
+                    ->orWhere('users.nim', 'like', $searchTerm);
             });
         }
 
+        // Handle AJAX requests for live search
         if ($request->ajax()) {
             return response()->json($query->get());
         }
