@@ -7,7 +7,7 @@
     <div class="mb-8 flex flex-col sm:flex-row gap-5 sm:items-center sm:justify-between">
         <form method="GET" action="{{ route('operator.proposal.index') }}" class="w-full sm:w-auto">
             <div class="relative flex items-center">
-                <input type="text" placeholder="Search users..." name="search" value="{{ request('search') }}"
+                <input type="text" placeholder="Search proposals..." name="search" value="{{ request('search') }}"
                     class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-72 text-gray-700 bg-gray-50">
                 <svg xmlns="http://www.w3.org/2000/svg"
                     class="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none"

@@ -15,7 +15,7 @@
             </a>
         </div>
 
-        <div class="mb-8 flex flex-col sm:flex-row gap-5 sm:items-center sm:justify-between">
+        {{-- <div class="mb-8 flex flex-col sm:flex-row gap-5 sm:items-center sm:justify-between">
             <form method="GET" action="{{ route('user.index') }}" class="w-full sm:w-auto">
                 <div class="relative flex items-center">
                     <input type="text" placeholder="Search teams..." name="search" value="{{ request('search') }}"
@@ -40,7 +40,7 @@
                     @endif
                 </div>
             </form>
-        </div>
+        </div> --}}
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
             <div class="overflow-x-auto">
