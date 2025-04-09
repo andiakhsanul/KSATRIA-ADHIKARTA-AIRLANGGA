@@ -15,14 +15,22 @@ class ProposalController extends Controller
     {
         $user = Auth::user();
         $search = $request->input('search');
+        $jenisPkmId = $request->input('jenis_pkm_id');
 
         // Base query
         $query = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
             ->with(['tim:id,nama_tim']);
 
-        // Apply search filter
+        // cari
         if ($search) {
             $query->where('judul_proposal', 'like', "%{$search}%");
+        }
+
+        // filter jenis pkm
+        if ($jenisPkmId) {
+            $query->whereHas('tim.jenisPkm', function ($q) use ($jenisPkmId) {
+                $q->where('id', $jenisPkmId);
+            });
         }
 
         // Role-based filtering
@@ -39,9 +47,11 @@ class ProposalController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $proposals = $query->paginate(10)->withQueryString(); // Preserve query string for pagination
+        // Preserve query string for pagination
+        $proposals = $query->paginate(10)->withQueryString(); 
+        $listJenisPkm = JenisPKMModel::select('id', 'nama_pkm')->get();
 
-        return view('Operator.Proposal.index', compact('proposals'));
+        return view('Operator.Proposal.index', compact('proposals', 'listJenisPkm'));
     }
 
 
