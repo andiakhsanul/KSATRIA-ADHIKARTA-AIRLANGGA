@@ -19,7 +19,10 @@ class ProposalController extends Controller
 
         // Base query
         $query = ProposalModel::select('id', 'judul_proposal', 'tim_id', 'status', 'created_at')
-            ->with(['tim:id,nama_tim']);
+            ->with([
+                'tim:id,nama_tim',
+                'tim.jenisPkm:id,nama_pkm'
+            ]);
 
         // cari
         if ($search) {

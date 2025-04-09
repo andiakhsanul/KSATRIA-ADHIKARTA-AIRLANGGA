@@ -74,6 +74,8 @@
                     </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Tim</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reviewer</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis PKM
+                    </th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal
                         Upload
                     </th>
@@ -103,6 +105,9 @@
                             @else
                                 <span class="text-gray-400 italic">No reviewer assigned</span>
                             @endif
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                            {{ $proposal->tim->jenisPkm->nama_pkm }}
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                             {{ \Carbon\Carbon::parse($proposal->created_at)->format('d M Y, H:i') }}
