@@ -77,9 +77,9 @@
                             <!-- Username/Email Field -->
                             <div class="space-y-1">
                                 <label for="username-{{ $team->id }}"
-                                    class="block text-sm font-medium text-gray-700">Username / Email</label>
+                                    class="block text-sm font-medium text-gray-700">Usernaml</label>
                                 <input type="text" id="username-{{ $team->id }}" name="username"
-                                    placeholder="Masukkan username atau email"
+                                    placeholder="Masukkan username"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required>
                             </div>
