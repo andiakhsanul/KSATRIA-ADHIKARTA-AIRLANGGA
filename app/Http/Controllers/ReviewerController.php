@@ -15,7 +15,9 @@ class ReviewerController extends Controller
     public function index()
     {
         $query = ApprovedTeamsModel::with([
-            'tim:id,nama_tim,username,password',
+            'tim:id,nama_tim,username,password,ketua_id,pkm_id',
+            'tim.ketua:id,nama_lengkap,nim',
+            'tim.jenisPkm:id,nama_pkm',
             'tim.proposal:id,judul_proposal,status,tim_id',
             'reviewer:id,nama_lengkap'
         ])
@@ -26,6 +28,7 @@ class ReviewerController extends Controller
         if (Auth::user()->role_id === 1) {
             // When role_id is 1, get all approved teams, including the necessary data
             $approved_teams = $query->paginate(10);
+            // return $approved_teams;
         } else {
             // When not role_id 1, filter by reviewer_id
             $approved_teams = $query->where('reviewer_id', Auth::id())->paginate(10);
