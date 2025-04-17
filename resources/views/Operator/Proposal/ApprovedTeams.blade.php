@@ -19,8 +19,9 @@
             <tr>
                 <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">No</th>
                 <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nama Tim</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nama Ketua | NIM</th>
+                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Skema PKM</th>
                 <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Judul Proposal</th>
-                {{-- <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Tanggal Disetujui</th> --}}
                 <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Action</th>
             </tr>
         </thead>
@@ -29,8 +30,10 @@
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $approved_teams->firstItem() + $index }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $team->tim->nama_tim ?? '-' }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-800">{{ $team->tim->ketua->nama_lengkap }} | {{ $team->tim->ketua->nim }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-800">{{ $team->tim->jenisPkm->nama_pkm }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">
-                        <a href=""
+                        <a target="_blank" href="{{ route('operator.proposal.detail', ['nama_tim' => $team->tim->nama_tim, 'proposal_id' => $team->tim->proposal->id]) }}"
                             class="text-blue-600 hover:underline">{{ $team->tim->proposal->judul_proposal }}</a>
                     </td>
                     {{-- <td class="px-4 py-2 text-sm text-gray-800">{{ $team->created_at}}</td> --}}
@@ -51,7 +54,7 @@
                             <a
                                 class="inline-flex items-center justify-center text-center px-3 py-1.5 bg-zinc-300 text-xs font-medium rounded-md disabled transition-colors duration-150 ease-in-out">
                                 Sudah Lolos
-                            </a>    
+                            </a>
                         @endif
                     </td>
                 </tr>
