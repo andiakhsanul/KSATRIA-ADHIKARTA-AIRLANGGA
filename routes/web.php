@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\CheckAuthMiddleware;
 use App\Http\Middleware\OperatorMiddleware;
+use App\Http\Middleware\ReviewerMiddleware;
 use App\Models\TimModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -88,13 +89,14 @@ Route::middleware(['auth', AuthMiddleware::class])->group(function () {
     Route::get('/manajemen-proposal/detail/{nama_tim}/{proposal_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
 
     Route::post('/comments/{revisi_id}', [CommentsController::class, 'store'])->name('kirim.komentar');
+});
 
+Route::middleware(ReviewerMiddleware::class)->group(function () {
     Route::get('/approved-teams/all', [ReviewerController::class, 'index'])->name('reviewTim.index');
     Route::post('/approve-team/{tim_id}', [ReviewerController::class, 'approveTeam'])->name('reviewTim.approve');
     Route::post('/add-credentials/{tim_id}', [ReviewerController::class, 'addCredentials'])->name('reviewTim.addCredentials');
     Route::get('/approved-teams/delete/{tim_id}', [ReviewerController::class, 'delete'])->name('reviewTim.delete');
 });
-
 
 Route::middleware(['operator'])->group(function () {
 

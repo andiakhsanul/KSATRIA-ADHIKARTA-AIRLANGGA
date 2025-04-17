@@ -17,12 +17,12 @@ class ReviewerMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // reviewer
-        if (Auth::user()->role === 2) {
+        if (Auth::user()->role_id === 2) {
             return $next($request);
         }
 
         // operator
-        if (Auth::user()->role === 1) {
+        if (Auth::user()->role_id === 1) {
             return $next($request);
         }
 
