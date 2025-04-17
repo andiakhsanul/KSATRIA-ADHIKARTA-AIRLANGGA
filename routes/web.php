@@ -7,6 +7,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewerAssignmentController;
+use App\Http\Controllers\ReviewerController;
 use App\Http\Controllers\RevisiController;
 use App\Http\Controllers\TimController;
 use App\Http\Controllers\TimManageController;
@@ -14,7 +15,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\CheckAuthMiddleware;
 use App\Http\Middleware\OperatorMiddleware;
+use App\Models\TimModel;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +38,15 @@ Route::middleware(['auth', AuthMiddleware::class])->group(function () {
         $hitung = DB::select('CALL GetUserCounts()');
         $counts = DB::select('Call GetCounts()');
 
+        $approved = TimModel::where('ketua_id', '=', Auth::id())
+            ->whereNotNull('username')
+            ->whereNotNull('password')
+            ->where('username', '!=', '')
+            ->where('password', '!=', '')
+            ->get();
+
         return view('dashboard', [
+            'approved' => $approved,
             'users' => $hitung[0]->total_users,
             'approved_users' => $hitung[0]->approved_users,
             'total_proposal' => $counts[0]->total_proposals,
@@ -77,6 +88,11 @@ Route::middleware(['auth', AuthMiddleware::class])->group(function () {
     Route::get('/manajemen-proposal/detail/{nama_tim}/{proposal_id}', [ProposalController::class, 'detailProposal'])->name('operator.proposal.detail');
 
     Route::post('/comments/{revisi_id}', [CommentsController::class, 'store'])->name('kirim.komentar');
+
+    Route::get('/approved-teams/all', [ReviewerController::class, 'index'])->name('reviewTim.index');
+    Route::post('/approve-team/{tim_id}', [ReviewerController::class, 'approveTeam'])->name('reviewTim.approve');
+    Route::post('/add-credentials/{tim_id}', [ReviewerController::class, 'addCredentials'])->name('reviewTim.addCredentials');
+    Route::get('/approved-teams/delete/{tim_id}', [ReviewerController::class, 'delete'])->name('reviewTim.delete');
 });
 
 
