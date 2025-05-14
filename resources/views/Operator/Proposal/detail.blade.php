@@ -29,10 +29,17 @@
                 </div>
 
                 @php
-                    $fileParts = explode('/', $proposal->file_path);
-                    $folder = $fileParts[0]; // Extracts 'reviews', 'proposals', or 'revisi'
-                    $filename = $fileParts[1]; // Extracts the actual filename
+                    $fileParts = explode('/', $proposal->file_path ?? '');
+                    $folder = $fileParts[0] ?? null;
+                    $filename = $fileParts[1] ?? null;
                 @endphp
+
+                @if ($folder && $filename)
+                    <p>Folder: {{ $folder }}</p>
+                    <p>Filename: {{ $filename }}</p>
+                @else
+                    <p class="text-danger">File path tidak valid.</p>
+                @endif
 
                 <a href="{{ route('file.view', ['folder' => $folder, 'filename' => $filename]) }}"
                     class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center"
@@ -86,7 +93,6 @@
                                             </div>
                                         </div>
                                         @if ($review->file)
-                                        
                                             @php
                                                 $fileParts = explode('/', $review->file);
                                                 $folder = $fileParts[0]; // Extracts 'reviews', 'proposals', or 'revisi'
