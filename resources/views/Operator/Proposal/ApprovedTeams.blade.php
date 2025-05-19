@@ -14,6 +14,25 @@
         </div>
     @endif
 
+    {{-- search --}}
+    <form method="GET" action="{{ route('reviewTim.index') }}" class="flex items-center gap-2 mb-4">
+        <input type="text" name="search" placeholder="Search by Team, Leader, or Title..."
+            value="{{ request('search') }}"
+            class="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+            Search
+        </button>
+
+        @if (request('search'))
+            <a href="{{ route('reviewTim.index') }}"
+                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition">
+                Reset
+            </a>
+        @endif
+    </form>
+
+
     <table id="teamsTable" class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg">
         <thead class="bg-gray-100">
             <tr>
@@ -30,10 +49,12 @@
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $approved_teams->firstItem() + $index }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $team->tim->nama_tim ?? '-' }}</td>
-                    <td class="px-4 py-2 text-sm text-gray-800">{{ $team->tim->ketua->nama_lengkap }} | {{ $team->tim->ketua->nim }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-800">{{ $team->tim->ketua->nama_lengkap }} |
+                        {{ $team->tim->ketua->nim }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $team->tim->jenisPkm->nama_pkm }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">
-                        <a target="_blank" href="{{ route('operator.proposal.detail', ['nama_tim' => $team->tim->nama_tim, 'proposal_id' => $team->tim->proposal->id]) }}"
+                        <a target="_blank"
+                            href="{{ route('operator.proposal.detail', ['nama_tim' => $team->tim->nama_tim, 'proposal_id' => $team->tim->proposal->id]) }}"
                             class="text-blue-600 hover:underline">{{ $team->tim->proposal->judul_proposal }}</a>
                     </td>
                     {{-- <td class="px-4 py-2 text-sm text-gray-800">{{ $team->created_at}}</td> --}}
