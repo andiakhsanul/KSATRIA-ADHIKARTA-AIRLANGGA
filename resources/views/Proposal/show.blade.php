@@ -53,9 +53,9 @@
                 </div>
 
                 @php
-                    $fileParts = explode('/', $proposal->file_path);
-                    $folder = $fileParts[0]; // Extracts 'reviews', 'proposals', or 'revisi'
-                    $filename = $fileParts[1]; // Extracts the actual filename
+                    $fileParts = explode('/', $proposal->file_path ?? '');
+                    $folder = $fileParts[0] ?? null;
+                    $filename = $fileParts[1] ?? null;
                 @endphp
 
                 <a href="{{ route('file.view', ['folder' => $folder, 'filename' => $filename]) }}"

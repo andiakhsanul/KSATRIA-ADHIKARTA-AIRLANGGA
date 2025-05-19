@@ -12,8 +12,10 @@ use Illuminate\Support\Str;
 
 class ReviewerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+
         $query = ApprovedTeamsModel::with([
             'tim:id,nama_tim,username,password,ketua_id,pkm_id',
             'tim.ketua:id,nama_lengkap,nim',
@@ -21,17 +23,27 @@ class ReviewerController extends Controller
             'tim.proposal:id,judul_proposal,status,tim_id',
             'reviewer:id,nama_lengkap'
         ])
-            ->join('tim', 'tim.id', '=', 'approved_teams.tim_id') // Join tim table
-            ->orderBy('tim.username'); // Now ordering correctly using tim.username
+            ->join('tim', 'tim.id', '=', 'approved_teams.tim_id')
+            ->join('users as ketua', 'tim.ketua_id', '=', 'ketua.id')
+            ->join('proposal', 'tim.id', '=', 'proposal.tim_id')
+            ->select('approved_teams.*') // Avoid duplicate column errors
+            ->orderBy('tim.username');
 
-        // Check if the user has role_id 1
+        // Search filter
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $search = strtolower($search); // Normalize for case-insensitive search
+                $q->whereRaw('LOWER(tim.nama_tim) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(ketua.nama_lengkap) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(proposal.judul_proposal) LIKE ?', ["%{$search}%"]);
+            });
+        }
+
+        // Role-based filtering
         if (Auth::user()->role_id === 1) {
-            // When role_id is 1, get all approved teams, including the necessary data
             $approved_teams = $query->paginate(10);
-            // return $approved_teams;
         } else {
-            // When not role_id 1, filter by reviewer_id
-            $approved_teams = $query->where('reviewer_id', Auth::id())->paginate(10);
+            $approved_teams = $query->where('approved_teams.reviewer_id', Auth::id())->paginate(10);
         }
 
         return view('Operator.Proposal.ApprovedTeams', compact('approved_teams'));
